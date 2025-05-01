@@ -28,3 +28,7 @@ Route::get('/products/create', [ProductController::class, 'create'])->name('prod
 
 // Route to handle the form submission (POST request)
 Route::post('/products', [ProductController::class, 'store'])->name('products.store');
+
+Route::get('/auth', function () {
+    return view('auth.auth');
+});

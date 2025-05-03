@@ -26,7 +26,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 flex-1">
             @foreach ($products as $product)
                 <div class="p-4 shadow rounded h-full max-w-sm min-w-3xs mx-auto flex flex-col">
-                    <div class="flex-grow">
+                    <div class="grow">
                         <h2 class="text-xl font-semibold truncate">{{ $product->name }}</h2>
                         <p class="text-gray-600 h-12 overflow-hidden">{{ $product->description }}</p>
                     </div>

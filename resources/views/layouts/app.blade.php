@@ -6,13 +6,12 @@
 
     @vite('resources/css/app.css') <!-- Tailwind setup -->
     @vite('resources/js/app.js')
-
 </head>
 <body class="min-h-screen flex flex-col bg-white text-gray-900">
 
     <x-header />
 
-    <main class="flex-grow">
+    <main class="grow">
         @yield('content')
     </main>
 

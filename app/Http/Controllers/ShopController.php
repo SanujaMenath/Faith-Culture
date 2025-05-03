@@ -16,5 +16,12 @@ public function index()
     $products = Product::all(); // Or filter by selected category
     return view('shop.index', compact('products', 'categories'));
 }
+public function filterByCategory($id)
+{
+    $products = Product::where('category_id', $id)->get(); // Filter by category
+    $categories = Category::all(); // Still show all categories in the sidebar
+
+    return view('shop.index', compact('products', 'categories'));
+}
 
 }

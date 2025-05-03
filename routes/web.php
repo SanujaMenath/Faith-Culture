@@ -1,6 +1,9 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CartController;
+use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShopController;
@@ -17,14 +20,14 @@ use App\Http\Controllers\ProductController;
 |
 */
 
+//Main routes
 Route::get('/', function () {
     return view('home');
 });
-
-
+Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
+Route::get('/orders',[OrdersController::class,'index'])->middleware('auth')->name('orders.index');
 Route::get('/shop', [ShopController::class, 'index']);
 Route::get('/shop/category/{id}', [ShopController::class, 'filterByCategory'])->name('shop.category');
-
 
 
 // Route to display the product creation form (GET request)
@@ -36,17 +39,23 @@ Route::post('/products', [ProductController::class, 'store'])->name('products.st
 Route::get('/login',[AuthController::class,'showlogin'])->name('login.form');
 Route ::post('/login',[AuthController::class,'login'])->name('login');; 
 Route::post('/register', [AuthController::class, 'register'])->name('register');
-Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
+Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
 
-// Route::get('/dashboard', [UserController::class, 'index'])->middleware('auth')->name('dashboard');
 // Admin Dashboard
 Route::get('/admin/dashboard', [UserController::class, 'admin'])
-    ->middleware(['auth', 'role:admin'])->name('dashboard.admin');
+    ->middleware(['auth', 'role:ADMIN'])->name('admin.index');
 
 // Staff Dashboard
-Route::get('/staff/dashboard', [UserController::class, 'staff'])
-    ->middleware(['auth', 'role:staff'])->name('dashboard.staff');
+Route::get('/staff/dashboard', [StaffController::class, 'index'])
+    ->middleware(['auth', 'role:STAFF'])->name('staff.index');
 
-// Customer Dashboard
-Route::get('/customer/dashboard', [UserController::class, 'index'])
-    ->middleware(['auth', 'role:customer'])->name('customer.dashboard');
+// User Profile
+Route::get('/profile', [UserController::class, 'index'])
+    ->middleware(['auth', 'role:USER'])->name('profile');
+
+// Cart Routes
+Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
+Route::get('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
+Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
+Route::get('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
+Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');

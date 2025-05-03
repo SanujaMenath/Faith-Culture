@@ -6,6 +6,8 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Auth\Events\Login;
+use App\Listeners\MergeCartAfterLogin;
 
 class EventServiceProvider extends ServiceProvider
 {
@@ -18,12 +20,15 @@ class EventServiceProvider extends ServiceProvider
         Registered::class => [
             SendEmailVerificationNotification::class,
         ],
+        Login::class => [
+            MergeCartAfterLogin::class,
+        ],
     ];
 
     /**
      * Register any events for your application.
      */
-    public function boot(): void
+        public function boot(): void
     {
         //
     }

@@ -27,7 +27,7 @@
           class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0"></span>
         <span class="relative z-10">Cart</span>
       </a>
-      <a href="/auth"
+      <a href="/login"
         class="relative px-4 py-2 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900">
         <span
           class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0"></span>

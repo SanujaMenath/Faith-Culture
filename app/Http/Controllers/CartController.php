@@ -17,11 +17,11 @@ class CartController extends Controller
                 ->get();
             return view('cart', compact('cartItems'));
         }
-
+        
         $cart = session()->get('cart', []);
         return view('cart', ['sessionCart' => $cart]);
     }
-
+    
     public function add(Product $product)
     {
         if (Auth::check()) {
@@ -29,7 +29,7 @@ class CartController extends Controller
             $cartItem = Cart::where('user_id', Auth::id())
                 ->where('product_id', $product->id)
                 ->first();
-
+            
             if ($cartItem) {
                 $cartItem->increment('quantity');
             } else {
@@ -53,10 +53,10 @@ class CartController extends Controller
             }
             session()->put('cart', $cart);
         }
-
+        
         return redirect()->back()->with('success', 'Product added to cart!');
     }
-
+    
     public function update(Request $request, Product $product)
     {
         if (Auth::check()) {
@@ -70,10 +70,10 @@ class CartController extends Controller
                 session()->put('cart', $cart);
             }
         }
-
+        
         return redirect()->back();
     }
-
+    
     public function remove(Product $product)
     {
         if (Auth::check()) {
@@ -87,10 +87,10 @@ class CartController extends Controller
                 session()->put('cart', $cart);
             }
         }
-
+        
         return redirect()->back()->with('success', 'Product removed!');
     }
-
+    
     public function clear()
     {
         if (Auth::check()) {
@@ -98,7 +98,66 @@ class CartController extends Controller
         } else {
             session()->forget('cart');
         }
-
+        
         return redirect()->back()->with('success', 'Cart cleared!');
+    }
+
+    /**
+     * Update the quantity of an item in the cart with increment/decrement.
+     *
+     * @param  Product  $product
+     * @param  Request  $request
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateQuantity(Product $product, Request $request)
+    {
+        $change = $request->input('change', 0);
+
+        if (Auth::check()) {
+            // User is logged in, update the database
+            $cartItem = Cart::where('user_id', Auth::id())
+                ->where('product_id', $product->id)
+                ->first();
+
+            if ($cartItem) {
+                $newQuantity = max(1, $cartItem->quantity + $change);
+                $cartItem->quantity = $newQuantity;
+                $cartItem->save();
+
+                // Calculate new total
+                $total = Cart::where('user_id', Auth::id())
+                    ->join('products', 'carts.product_id', '=', 'products.id')
+                    ->selectRaw('SUM(products.price * carts.quantity) as total')
+                    ->value('total');
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $newQuantity,
+                    'total' => $total
+                ]);
+            }
+        } else {
+            // User is not logged in, update the session
+            $cart = session()->get('cart', []);
+
+            if (isset($cart[$product->id])) {
+                $cart[$product->id]['quantity'] = max(1, $cart[$product->id]['quantity'] + $change);
+                session()->put('cart', $cart);
+
+                // Calculate new total
+                $total = 0;
+                foreach ($cart as $item) {
+                    $total += $item['price'] * $item['quantity'];
+                }
+
+                return response()->json([
+                    'success' => true,
+                    'quantity' => $cart[$product->id]['quantity'],
+                    'total' => $total
+                ]);
+            }
+        }
+
+        return response()->json(['success' => false], 404);
     }
 }

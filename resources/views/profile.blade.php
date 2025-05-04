@@ -14,8 +14,9 @@
             </div>
 
             <div>
-                <label class="block text-sm font-medium text-gray-700">First Name</label>
-                <p class="mt-1 text-lg text-gray-900">{{ explode(' ', Auth::user()->name) }}</p>
+                <label class="block text-sm font-medium text-gray-700">Address</label>
+                <p class="mt-1 text-lg text-gray-900"></p>
+
             </div>
 
             <div>

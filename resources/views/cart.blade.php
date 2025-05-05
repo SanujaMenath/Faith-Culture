@@ -33,7 +33,7 @@
                                     <div>
                                         <h3 class="font-medium text-lg">{{ $item->product->name }}</h3>
                                         <p class="text-gray-500">{{ $item->variant ?? '' }}</p>
-                                        <p class="font-bold mt-1">${{ $item->product->price }}</p>
+                                        <p class="font-bold mt-1">Rs {{ $item->product->price }}</p>
                                         
                                         <!-- Quantity controls moved here -->
                                         <div class="flex items-center mt-4">
@@ -107,7 +107,7 @@
                                     <div>
                                         <h3 class="font-medium text-lg">{{ $item['name'] }}</h3>
                                         <p class="text-gray-500">{{ $item['variant'] ?? '' }}</p>
-                                        <p class="font-bold mt-1">${{ $item['price'] }}</p>
+                                        <p class="font-bold mt-1">Rs {{ $item['price'] }}</p>
                                         
                                         <!-- Quantity controls moved here -->
                                         <div class="flex items-center mt-4">
@@ -149,7 +149,7 @@
                     @endphp
                     <div class="flex justify-between items-center font-bold text-lg mb-6">
                         <span>Total</span>
-                        <span class="cart-total">${{ $sessionTotal }}</span>
+                        <span class="cart-total">Rs {{ $sessionTotal }}</span>
                     </div>
                     
                     <button type="submit" class="block w-full bg-black text-white text-center py-4 rounded-full font-medium hover:bg-gray-800 mb-3">

@@ -61,7 +61,7 @@
                x-transition:leave-start="opacity-100 scale-100"
                x-transition:leave-end="opacity-0 scale-95"
                class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50">
-            <a href="/profile" class="block px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
+            <a href="/admin/profile" class="block px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
               <i class="fas fa-user-circle mr-2"></i> Profile
             </a>
             <a href="/settings" class="block px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">

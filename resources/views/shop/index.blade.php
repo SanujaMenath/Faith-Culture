@@ -36,7 +36,7 @@
 
                         </div>
                         <div class="mt-3 flex items-center justify-between">
-                            <p class="text-blue-600 font-bold text-lg">${{ $product->price }}</p>
+                            <p class="text-blue-600 font-bold text-lg">Rs. {{ $product->price }}</p>
                             <a href="{{ route('cart.add', $product->id) }}" class="bg-gray-800 text-white px-4 py-2 text-sm rounded hover:bg-gray-600 transition">
                                 Add to Cart
                             </a>

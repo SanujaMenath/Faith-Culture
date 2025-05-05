@@ -26,6 +26,9 @@ use App\Http\Controllers\ProductController;
 Route::get('/', function () {
     return view('home');
 });
+Route::get('/settings', function () {
+    return view('settings');
+});
 Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
 Route::get('/orders',[OrdersController::class,'index'])->middleware('auth')->name('orders.index');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
@@ -50,6 +53,8 @@ Route::get('/admin/profile', [AdminController::class, 'editProfile'])->name('adm
 Route::get('admin/add-category', [AdminController::class, 'showAddCategoryForm'])->name('admin.addCategory');
 Route::post('admin/add-category', [AdminController::class, 'addCategory'])->name('admin.addCategoryForm');
 Route::get('admin/add-products', [AdminController::class, 'showAddProductsForm'])->name('admin.addProducts');
+Route::post('/admin/add-products', [AdminController::class, 'addProduct'])->name('admin.addProductsForm');
+
 // Manage staff
 Route::get('/admin/create-staff', [AdminController::class, 'showCreateStaffForm'])->name('admin.staffs');
 Route::post('/admin/create-staff', [AdminController::class, 'createStaff'])->name('admin.createStaff');

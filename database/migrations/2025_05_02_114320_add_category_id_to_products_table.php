@@ -12,7 +12,8 @@ return new class extends Migration
     public function up()
 {
     Schema::table('products', function (Blueprint $table) {
-        $table->foreignId('category_id')->nullable()->constrained()->onDelete('set null');
+        $table->foreign('category_id')->references('id')->on('category')->onDelete('set null');
+
     });
 }
 

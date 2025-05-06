@@ -42,36 +42,63 @@ class AdminController extends Controller
         return view('admin.addProducts', compact('categories'));
     }
     public function addProduct(Request $request)
-{
-    // 1. Validate input
-    $validated = $request->validate([
-        'name' => 'required|string|max:191',
-        'description' => 'nullable|string',
-        'price' => 'required|numeric|min:0',
-        'category_id' => 'nullable|exists:categories,id',
-        'image' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // 5MB max
-    ]);
+    {
+        // 1. Validate input
+        $validated = $request->validate([
+            'name' => 'required|string|max:191',
+            'description' => 'nullable|string',
+            'category_id' => 'nullable|exists:categories,id',
+        ]);
 
-    // 2. Handle image upload
-    $imagePath = null;
-    if ($request->hasFile('image')) {
-        $imageName = time() . '.' . $request->file('image')->getClientOriginalExtension();
-        $request->file('image')->storeAs('public/products', $imageName);
-        $imagePath = 'products/' . $imageName;
+       
+
+        // 3. Create product
+        Product::create([
+            'name' => $validated['name'],
+            'description' => $validated['description'] ?? null,
+            'category_id' => $validated['category_id'] ?? null,
+        ]);
+
+        // 4. Redirect back with success message
+        return back()->with('success', 'Product added successfully.');
     }
 
-    // 3. Create product
-    Product::create([
-        'name' => $validated['name'],
-        'description' => $validated['description'] ?? null,
-        'price' => $validated['price'],
-        'category_id' => $validated['category_id'] ?? null,
-        'image_url' => $imagePath,
-    ]);
+    public function viewInventory()
+    {
+        $products = Product::with('inventories')->get();
+        return view('admin.inventory', compact('products'));
+    }
 
-    // 4. Redirect back with success message
-    return back()->with('success', 'Product added successfully.');
-}
+    public function manageInventory(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'color' => 'required|string|max:50',
+            'size' => 'required|string|max:50',
+            'stock_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // 5MB max
+        ]);
+
+         // 2. Handle image upload
+         $imagePath = null;
+         if ($request->hasFile('image_url')) {
+             $imageName = time() . '.' . $request->file('image_url')->getClientOriginalExtension();
+             $request->file('image_url')->storeAs('public/products', $imageName);
+             $imagePath = 'products/' . $imageName;
+         }
+
+        // Create or update inventory item
+        Product::find($request->product_id)->inventories()->create([
+            'color' => $request->color,
+            'size' => $request->size,
+            'stock_quantity' => $request->stock_quantity,
+            'price' => $request->price,
+            'image_url' => $imagePath,
+        ]);
+
+        return back()->with('success', 'Inventory updated successfully.');
+    }
 
 
     public function editHomepage()

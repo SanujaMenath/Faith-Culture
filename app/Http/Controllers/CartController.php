@@ -2,162 +2,75 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Product;
 use App\Models\Cart;
-use Illuminate\Support\Facades\Auth;
+use Auth;
+use Illuminate\Http\Request;
+use App\Models\Inventory;
 
 class CartController extends Controller
 {
     public function index()
     {
-        if (Auth::check()) {
-            $cartItems = Cart::with('product')
-                ->where('user_id', Auth::id())
-                ->get();
-            return view('cart', compact('cartItems'));
+        $cartItems = \App\Models\Cart::with('product', 'product.inventories')
+            ->where('user_id', auth()->id())
+            ->get();
+    
+        // Convert to the array structure expected by the Blade view
+        $cart = [];
+    
+        foreach ($cartItems as $item) {
+            $inventory = $item->product->inventories->first(); 
+    
+            $cart[$item->id] = [
+                'color' => optional($inventory)->color,
+                'size' => optional($inventory)->size,
+                'price' => $item->product->inventories->first()->price ?? 0,
+                'image_url' => $inventory->image_url ?? 'default.png',
+                'quantity' => $item->quantity,
+            ];
         }
-        
-        $cart = session()->get('cart', []);
-        return view('cart', ['sessionCart' => $cart]);
+    
+        return view('cart', compact('cart'));
     }
     
-    public function add(Product $product)
+    public function add(Request $request)
     {
-        if (Auth::check()) {
-            // Check if item already in cart
-            $cartItem = Cart::where('user_id', Auth::id())
-                ->where('product_id', $product->id)
-                ->first();
-            
-            if ($cartItem) {
-                $cartItem->increment('quantity');
-            } else {
-                Cart::create([
-                    'user_id' => Auth::id(),
-                    'product_id' => $product->id,
-                    'quantity' => 1,
-                ]);
-            }
-        } else {
-            $cart = session()->get('cart', []);
-            if (isset($cart[$product->id])) {
-                $cart[$product->id]['quantity']++;
-            } else {
-                $cart[$product->id] = [
-                    "name" => $product->name,
-                    "price" => $product->price,
-                    "image" => $product->image_url,
-                    "quantity" => 1
-                ];
-            }
-            session()->put('cart', $cart);
-        }
-        
-        return redirect()->back()->with('success', 'Product added to cart!');
-    }
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'variant_id' => 'required|exists:inventory,id',
+        ]);
     
-    public function update(Request $request, Product $product)
-    {
-        if (Auth::check()) {
-            Cart::where('user_id', Auth::id())
-                ->where('product_id', $product->id)
-                ->update(['quantity' => $request->quantity]);
-        } else {
-            $cart = session()->get('cart', []);
-            if (isset($cart[$product->id])) {
-                $cart[$product->id]['quantity'] = $request->quantity;
-                session()->put('cart', $cart);
-            }
-        }
-        
-        return redirect()->back();
-    }
+        $userId = Auth::id(); // Ensure user is logged in
+        $variant = Inventory::findOrFail($request->variant_id);
     
-    public function remove(Product $product)
-    {
-        if (Auth::check()) {
-            Cart::where('user_id', Auth::id())
-                ->where('product_id', $product->id)
-                ->delete();
-        } else {
-            $cart = session()->get('cart', []);
-            if (isset($cart[$product->id])) {
-                unset($cart[$product->id]);
-                session()->put('cart', $cart);
-            }
-        }
-        
-        return redirect()->back()->with('success', 'Product removed!');
-    }
+        // Check if already exists in user's cart
+        $existing = Cart::where('user_id', $userId)
+                        ->where('product_id', $request->product_id)
+                        ->first();
     
-    public function clear()
-    {
-        if (Auth::check()) {
-            Cart::where('user_id', Auth::id())->delete();
+        if ($existing) {
+            $existing->quantity += 1;
+            $existing->save();
         } else {
-            session()->forget('cart');
+            Cart::create([
+                'user_id' => $userId,
+                'product_id' => $request->product_id,
+                'quantity' => 1,
+            ]);
         }
-        
-        return redirect()->back()->with('success', 'Cart cleared!');
+    
+        return redirect()->route('cart.index')->with('success', 'Item added to cart!');
     }
 
-    /**
-     * Update the quantity of an item in the cart with increment/decrement.
-     *
-     * @param  Product  $product
-     * @param  Request  $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function updateQuantity(Product $product, Request $request)
-    {
-        $change = $request->input('change', 0);
+    public function remove(Request $request)
+{
+    $request->validate(['cart_id' => 'required|integer']);
 
-        if (Auth::check()) {
-            // User is logged in, update the database
-            $cartItem = Cart::where('user_id', Auth::id())
-                ->where('product_id', $product->id)
-                ->first();
+    Cart::where('id', $request->cart_id)
+        ->where('user_id', auth()->id())
+        ->delete();
 
-            if ($cartItem) {
-                $newQuantity = max(1, $cartItem->quantity + $change);
-                $cartItem->quantity = $newQuantity;
-                $cartItem->save();
+    return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
+}
 
-                // Calculate new total
-                $total = Cart::where('user_id', Auth::id())
-                    ->join('products', 'carts.product_id', '=', 'products.id')
-                    ->selectRaw('SUM(products.price * carts.quantity) as total')
-                    ->value('total');
-
-                return response()->json([
-                    'success' => true,
-                    'quantity' => $newQuantity,
-                    'total' => $total
-                ]);
-            }
-        } else {
-            // User is not logged in, update the session
-            $cart = session()->get('cart', []);
-
-            if (isset($cart[$product->id])) {
-                $cart[$product->id]['quantity'] = max(1, $cart[$product->id]['quantity'] + $change);
-                session()->put('cart', $cart);
-
-                // Calculate new total
-                $total = 0;
-                foreach ($cart as $item) {
-                    $total += $item['price'] * $item['quantity'];
-                }
-
-                return response()->json([
-                    'success' => true,
-                    'quantity' => $cart[$product->id]['quantity'],
-                    'total' => $total
-                ]);
-            }
-        }
-
-        return response()->json(['success' => false], 404);
-    }
 }

@@ -33,13 +33,8 @@ Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->
 Route::get('/orders',[OrdersController::class,'index'])->middleware('auth')->name('orders.index');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/category/{id}', [ShopController::class, 'filterByCategory'])->name('shop.category');
+Route::get('/shop/product/{id}', [ProductController::class, 'productDetails'])->name('product.details');
 
-
-// Route to display the product creation form (GET request)
-Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-
-// Route to handle the form submission (POST request)
-Route::post('/products', [ProductController::class, 'store'])->name('products.store');
 
 Route::get('/login',[AuthController::class,'showlogin'])->name('login.form');
 Route ::post('/login',[AuthController::class,'login'])->name('login');; 
@@ -49,11 +44,13 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->n
 // Admin Dashboard
 Route::get('/admin/dashboard', [AdminController::class, 'index'])
     ->middleware(['auth', 'role:ADMIN'])->name('admin.index');
-Route::get('/admin/profile', [AdminController::class, 'editProfile'])->name('admin.profile');
-Route::get('admin/add-category', [AdminController::class, 'showAddCategoryForm'])->name('admin.addCategory');
-Route::post('admin/add-category', [AdminController::class, 'addCategory'])->name('admin.addCategoryForm');
-Route::get('admin/add-products', [AdminController::class, 'showAddProductsForm'])->name('admin.addProducts');
-Route::post('/admin/add-products', [AdminController::class, 'addProduct'])->name('admin.addProductsForm');
+Route::get('/admin/profile', [AdminController::class, 'editProfile']) ->middleware(['auth', 'role:ADMIN'])->name('admin.profile');
+Route::get('admin/add-category', [AdminController::class, 'showAddCategoryForm']) ->middleware(['auth', 'role:ADMIN'])->name('admin.addCategory');
+Route::post('admin/add-category', [AdminController::class, 'addCategory']) ->middleware(['auth', 'role:ADMIN'])->name('admin.addCategoryForm');
+Route::get('admin/add-products', [AdminController::class, 'showAddProductsForm']) ->middleware(['auth', 'role:ADMIN'])->name('admin.addProducts');
+Route::post('/admin/add-products', [AdminController::class, 'addProduct']) ->middleware(['auth', 'role:ADMIN'])->name('admin.addProductsForm');
+Route::get('/admin/inventory', [AdminController::class, 'viewInventory']) ->middleware(['auth', 'role:ADMIN'])->name('admin.inventory');
+Route::post('/admin/inventory', [AdminController::class, 'manageInventory']) ->middleware(['auth', 'role:ADMIN'])->name('admin.manageInventory');
 
 // Manage staff
 Route::get('/admin/create-staff', [AdminController::class, 'showCreateStaffForm'])->name('admin.staffs');
@@ -71,11 +68,14 @@ Route::get('/profile', [UserController::class, 'index'])
     ->middleware(['auth', 'role:USER'])->name('profile');
 
 // Cart Routes
+Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
-Route::get('/cart/add/{product}', [CartController::class, 'add'])->name('cart.add');
-Route::post('/cart/update/{product}', [CartController::class, 'update'])->name('cart.update');
-Route::get('/cart/remove/{product}', [CartController::class, 'remove'])->name('cart.remove');
-Route::get('/cart/clear', [CartController::class, 'clear'])->name('cart.clear');
-Route::post('/cart/update-quantity/{product}', [CartController::class, 'updateQuantity'])->name('cart.update-quantity');
+Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+
+
 
 Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+
+
+
+

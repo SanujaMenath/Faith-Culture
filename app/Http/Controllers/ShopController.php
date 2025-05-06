@@ -13,12 +13,12 @@ class ShopController extends Controller
 public function index()
 {
     $categories = Category::all();
-    $products = Product::all(); // Or filter by selected category
+    $products = Product::with('inventories')->get();
     return view('shop.index', compact('products', 'categories'));
 }
 public function filterByCategory($id)
 {
-    $products = Product::where('category_id', $id)->get(); // Filter by category
+    $products = Product::with('inventories')->where('category_id', $id)->get();
     $categories = Category::all(); // Still show all categories in the sidebar
 
     return view('shop.index', compact('products', 'categories'));

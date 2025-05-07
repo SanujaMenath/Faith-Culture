@@ -11,66 +11,93 @@ class CartController extends Controller
 {
     public function index()
     {
-        $cartItems = \App\Models\Cart::with('product', 'product.inventories')
-            ->where('user_id', auth()->id())
-            ->get();
-    
-        // Convert to the array structure expected by the Blade view
         $cart = [];
-    
-        foreach ($cartItems as $item) {
-            $inventory = $item->product->inventories->first(); 
-    
-            $cart[$item->id] = [
-                'color' => optional($inventory)->color,
-                'size' => optional($inventory)->size,
-                'price' => $item->product->inventories->first()->price ?? 0,
-                'image_url' => $inventory->image_url ?? 'default.png',
-                'quantity' => $item->quantity,
-            ];
+
+        if (auth()->check()) {
+            $cartItems = Cart::with(['inventory.color', 'inventory.size'])->where('user_id', auth()->id())->get();
+
+            foreach ($cartItems as $item) {
+                $variant = $item->inventory;
+                $cart[$item->id] = [
+                    'color' => $variant->color->name ?? 'N/A',
+                    'size' => $variant->size->name ?? 'N/A',
+                    'price' => $variant->price,
+                    'image_url' => $variant->image_url,
+                    'quantity' => $item->quantity,
+                ];
+            }
+        } else {
+            $cart = session()->get('cart', []);
         }
-    
+
         return view('cart', compact('cart'));
     }
-    
+
+
     public function add(Request $request)
     {
         $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'variant_id' => 'required|exists:inventory,id',
+            'inventory_id' => 'required|exists:inventory,id',
         ]);
-    
-        $userId = Auth::id(); // Ensure user is logged in
-        $variant = Inventory::findOrFail($request->variant_id);
-    
-        // Check if already exists in user's cart
-        $existing = Cart::where('user_id', $userId)
-                        ->where('product_id', $request->product_id)
-                        ->first();
-    
-        if ($existing) {
-            $existing->quantity += 1;
-            $existing->save();
-        } else {
-            Cart::create([
+
+        $variant = Inventory::with('color', 'size')->findOrFail($request->inventory_id);
+
+        if (auth()->check()) {
+            // Logged-in user - use DB
+            $userId = auth()->id();
+
+            $cartItem = Cart::firstOrNew([
                 'user_id' => $userId,
-                'product_id' => $request->product_id,
-                'quantity' => 1,
+                'inventory_id' => $request->inventory_id,
             ]);
+
+            $cartItem->quantity += 1;
+            $cartItem->save();
+
+        } else {
+            // Guest - use session
+            $cart = session()->get('cart', []);
+
+            if (isset($cart[$request->inventory_id])) {
+                $cart[$request->inventory_id]['quantity'] += 1;
+            } else {
+                $cart[$request->inventory_id] = [
+                    'inventory_id' => $request->inventory_id,
+                    'color' => $variant->color->name,
+                    'size' => $variant->size->name,
+                    'price' => $variant->price,
+                    'image_url' => $variant->image_url,
+                    'quantity' => 1,
+                ];
+            }
+
+            session()->put('cart', $cart);
         }
-    
+
         return redirect()->route('cart.index')->with('success', 'Item added to cart!');
     }
 
+
     public function remove(Request $request)
-{
-    $request->validate(['cart_id' => 'required|integer']);
+    {
+        $request->validate([
+            'cart_id' => 'required',
+        ]);
 
-    Cart::where('id', $request->cart_id)
-        ->where('user_id', auth()->id())
-        ->delete();
+        if (auth()->check()) {
+            // From DB
+            Cart::where('id', $request->cart_id)
+                ->where('user_id', auth()->id())
+                ->delete();
+        } else {
+            // From session
+            $cart = session()->get('cart', []);
+            unset($cart[$request->cart_id]);
+            session()->put('cart', $cart);
+        }
 
-    return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
-}
+        return redirect()->route('cart.index')->with('success', 'Item removed from cart.');
+    }
+
 
 }

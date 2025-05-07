@@ -47,7 +47,7 @@
                 
                 <p class="text-gray-700 text-lg mb-2">{{ $product->description }}</p>
                 <div class="p-3 border-l-4 border-blue-500 bg-blue-50 text-blue-700 text-sm mt-4">
-                    Free shipping on orders over Rs. 1,500
+                    Free shipping on orders over Rs. 5,000
                 </div>
             </div>
 

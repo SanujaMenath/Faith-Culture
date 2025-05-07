@@ -13,7 +13,6 @@
         @endif
 
         @if(!empty($cart) && count($cart) > 0)
-
             <table class="w-full border">
                 <thead>
                     <tr class="bg-gray-100">
@@ -30,10 +29,10 @@
                         @php $total += $item['price'] * $item['quantity']; @endphp
                         <tr class="border-t">
                             <td class="p-2">
-                                <img src="{{ asset('storage/' . $item['image_url']) }}" class="w-16 h-16 object-cover">
+                                <img src="{{ asset('storage/' . $item['image_url']) }}" class="w-16 h-16 object-cover" alt="Product Image">
                             </td>
                             <td class="p-2">
-                                {{ $item['color'] }} / {{ $item['size'] }}
+                                {{ $item['color'] ?? 'N/A' }} / {{ $item['size'] ?? 'N/A' }}
                             </td>
                             <td class="p-2">{{ $item['quantity'] }}</td>
                             <td class="p-2">Rs. {{ number_format($item['price'], 2) }}</td>
@@ -43,8 +42,6 @@
                                     <input type="hidden" name="cart_id" value="{{ $id }}">
                                     <button type="submit" class="text-red-600 hover:underline">Remove</button>
                                 </form>
-
-
                             </td>
                         </tr>
                     @endforeach

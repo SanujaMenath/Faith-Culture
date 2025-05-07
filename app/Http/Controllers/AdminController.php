@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Category;
+use App\Models\Color;
+use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\Size;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -64,41 +67,56 @@ class AdminController extends Controller
     }
 
     public function viewInventory()
-    {
-        $products = Product::with('inventories')->get();
-        return view('admin.inventory', compact('products'));
+{
+    $colors = Color::with('inventories')->get();
+    $sizes = Size::with('inventories')->get();
+    $products = Product::with('inventories')->get();
+
+    return view('admin.inventory', compact('products', 'colors', 'sizes'));
+}
+
+public function manageInventory(Request $request)
+{
+    $request->validate([
+        'product_id' => 'required|exists:products,id',
+        'color_id' => 'required|exists:colors,id',
+        'size_id' => 'required|exists:sizes,id',
+        'stock_quantity' => 'required|integer|min:0',
+        'price' => 'required|numeric|min:0',
+        'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+    ]);
+
+    // Check if inventory variant already exists
+    $existing = Inventory::where([
+        'product_id' => $request->product_id,
+        'color_id' => $request->color_id,
+        'size_id' => $request->size_id,
+    ])->first();
+
+    if ($existing) {
+        return back()->withErrors(['duplicate' => 'This product variant already exists in inventory.']);
     }
 
-    public function manageInventory(Request $request)
-    {
-        $request->validate([
-            'product_id' => 'required|exists:products,id',
-            'color' => 'required|string|max:50',
-            'size' => 'required|string|max:50',
-            'stock_quantity' => 'required|integer|min:0',
-            'price' => 'required|numeric|min:0',
-            'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:5120', // 5MB max
-        ]);
-
-         // 2. Handle image upload
-         $imagePath = null;
-         if ($request->hasFile('image_url')) {
-             $imageName = time() . '.' . $request->file('image_url')->getClientOriginalExtension();
-             $request->file('image_url')->storeAs('public/products', $imageName);
-             $imagePath = 'products/' . $imageName;
-         }
-
-        // Create or update inventory item
-        Product::find($request->product_id)->inventories()->create([
-            'color' => $request->color,
-            'size' => $request->size,
-            'stock_quantity' => $request->stock_quantity,
-            'price' => $request->price,
-            'image_url' => $imagePath,
-        ]);
-
-        return back()->with('success', 'Inventory updated successfully.');
+    // Handle image upload
+    $imagePath = null;
+    if ($request->hasFile('image_url')) {
+        $imageName = time() . '.' . $request->file('image_url')->getClientOriginalExtension();
+        $request->file('image_url')->storeAs('public/products', $imageName);
+        $imagePath = 'products/' . $imageName;
     }
+
+    // Save new inventory
+    Product::find($request->product_id)->inventories()->create([
+        'color_id' => $request->color_id,
+        'size_id' => $request->size_id,
+        'stock_quantity' => $request->stock_quantity,
+        'price' => $request->price,
+        'image_url' => $imagePath,
+    ]);
+
+    return back()->with('success', 'Inventory updated successfully.');
+}
+
 
 
     public function editHomepage()

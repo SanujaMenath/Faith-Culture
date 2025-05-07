@@ -4,7 +4,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
-use App\Http\Controllers\OrdersController;
+use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
@@ -30,7 +30,7 @@ Route::get('/settings', function () {
     return view('settings');
 });
 Route::get('/profile', [UserController::class, 'profile'])->middleware('auth')->name('profile');
-Route::get('/orders',[OrdersController::class,'index'])->middleware('auth')->name('orders.index');
+Route::get('/orders',[OrderController::class,'index'])->middleware('auth')->name('orders.index');
 Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/category/{id}', [ShopController::class, 'filterByCategory'])->name('shop.category');
 Route::get('/shop/product/{id}', [ProductController::class, 'productDetails'])->name('product.details');
@@ -71,10 +71,10 @@ Route::get('/profile', [UserController::class, 'index'])
 Route::post('/cart/add', [CartController::class, 'add'])->name('cart.add');
 Route::get('/cart', [CartController::class, 'index'])->name('cart.index');
 Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remove');
+Route::post('/cart/update', [CartController::class, 'updatQuantity'])->name('cart.update');
 
 
-
-Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
+Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
 
 
 

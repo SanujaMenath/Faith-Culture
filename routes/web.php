@@ -75,8 +75,10 @@ Route::post('/cart/update', [CartController::class, 'updateQuantity'])->name('ca
 
 
 Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.index');
 
-
-
+Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('order.place');
+Route::get('view-orders', [OrderController::class, 'showOrders'])->name('orders.show');
+Route::get('/order', [OrderController::class, 'placeOrder'])->name('orders.confirm');
 
 

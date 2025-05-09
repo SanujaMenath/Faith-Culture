@@ -155,7 +155,7 @@ class CartController extends Controller
         session()->put('checkout_items', $selectedCart);
         session()->put('checkout_note', $note);  // <-- Save note here
 
-        return redirect()->route('checkout');
+        return redirect()->route('checkout.index')->with('success', 'Items ready for checkout.');
     }
 
 

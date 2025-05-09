@@ -3,11 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
-use App\Models\Product;
-use Auth;
-use DB;
-use Illuminate\Http\Request;
 use App\Models\Inventory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class CartController extends Controller
 {
@@ -16,12 +14,14 @@ class CartController extends Controller
         $cart = [];
 
         if (auth()->check()) {
-            $cartItems = Cart::with(['inventory.color', 'inventory.size', 'inventory.product'])->where('user_id', auth()->id())->get();
+            $cartItems = Cart::with(['inventory.color', 'inventory.size', 'inventory.product'])
+                ->where('user_id', auth()->id())
+                ->get();
 
             foreach ($cartItems as $item) {
                 $variant = $item->inventory;
                 $cart[$item->id] = [
-                    'name' => $variant->product->name ?? 'Product',  // Add product name
+                    'name' => $variant->product->name ?? 'Product',
                     'color' => $variant->color->name ?? 'N/A',
                     'size' => $variant->size->name ?? 'N/A',
                     'price' => $variant->price,
@@ -40,36 +40,33 @@ class CartController extends Controller
     {
         $request->validate([
             'inventory_id' => 'required|exists:inventory,id',
+            'quantity' => 'required|integer|min:1',
         ]);
-
+        $quantity = $request->quantity;
         $variant = Inventory::with(['color', 'size', 'product'])->findOrFail($request->inventory_id);
 
         if (auth()->check()) {
-            // Logged-in user - use DB
-            $userId = auth()->id();
-
             $cartItem = Cart::firstOrNew([
-                'user_id' => $userId,
-                'inventory_id' => $request->inventory_id,
+                'user_id' => auth()->id(),
+                'inventory_id' => $variant->id,
             ]);
-
-            $cartItem->quantity += 1;
+            $cartItem->quantity = ($cartItem->exists ? $cartItem->quantity : 0) + $quantity;
             $cartItem->save();
         } else {
-            // Guest - use session
             $cart = session()->get('cart', []);
+            $id = (string) $variant->id;
 
-            if (isset($cart[$request->inventory_id])) {
-                $cart[$request->inventory_id]['quantity'] += 1;
+            if (isset($cart[$id])) {
+                $cart[$id]['quantity'] += $quantity;
             } else {
-                $cart[$request->inventory_id] = [
-                    'inventory_id' => $request->inventory_id,
-                    'name' => $variant->product->name ?? 'Product',  // Add product name
-                    'color' => $variant->color->name,
-                    'size' => $variant->size->name,
+                $cart[$id] = [
+                    'inventory_id' => $variant->id,
+                    'name' => $variant->product->name ?? 'Product',
+                    'color' => $variant->color->name ?? 'N/A',
+                    'size' => $variant->size->name ?? 'N/A',
                     'price' => $variant->price,
                     'image_url' => $variant->image_url,
-                    'quantity' => 1,
+                    'quantity' => $quantity,
                 ];
             }
 
@@ -79,20 +76,15 @@ class CartController extends Controller
         return redirect()->route('cart.index')->with('success', 'Item added to cart!');
     }
 
-
     public function remove(Request $request)
     {
-        $request->validate([
-            'cart_id' => 'required',
-        ]);
+        $request->validate(['cart_id' => 'required']);
 
         if (auth()->check()) {
-            // From DB
             Cart::where('id', $request->cart_id)
                 ->where('user_id', auth()->id())
                 ->delete();
         } else {
-            // From session
             $cart = session()->get('cart', []);
             unset($cart[$request->cart_id]);
             session()->put('cart', $cart);
@@ -105,14 +97,13 @@ class CartController extends Controller
     {
         $request->validate([
             'cart_id' => 'required',
-            'quantity' => 'required|integer|min:1'
+            'quantity' => 'required|integer|min:1',
         ]);
 
-        $cartId = $request->input('cart_id');
-        $quantity = $request->input('quantity');
+        $cartId = $request->cart_id;
+        $quantity = $request->quantity;
 
         if (auth()->check()) {
-            // For logged-in users, cart_id is the Cart model ID
             $cartItem = Cart::where('id', $cartId)
                 ->where('user_id', auth()->id())
                 ->first();
@@ -121,61 +112,27 @@ class CartController extends Controller
                 $cartItem->quantity = $quantity;
                 $cartItem->save();
 
-                // Calculate new total for response
                 $total = Cart::where('user_id', auth()->id())
                     ->join('inventory', 'carts.inventory_id', '=', 'inventory.id')
                     ->sum(DB::raw('inventory.price * carts.quantity'));
 
-                if ($request->ajax()) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Cart updated successfully',
-                        'total' => number_format($total, 0)
-                    ]);
-                }
-
-                return redirect()->back()->with('success', 'Cart updated successfully');
+                return response()->json(['success' => true, 'total' => number_format($total, 0), 'quantity' => $quantity]);
             }
         } else {
-            // For guests, using session
             $cart = session()->get('cart', []);
 
-            // Check if the item exists in the cart
             if (isset($cart[$cartId])) {
-                // Update the quantity
                 $cart[$cartId]['quantity'] = $quantity;
-
-                // Save back to session
                 session()->put('cart', $cart);
 
-                // Calculate new total
-                $total = 0;
-                foreach ($cart as $item) {
-                    $total += $item['price'] * $item['quantity'];
-                }
+                $total = collect($cart)->sum(function ($item) {
+                    return $item['price'] * $item['quantity'];
+                });
 
-                // If it's an AJAX request, return JSON response
-                if ($request->ajax()) {
-                    return response()->json([
-                        'success' => true,
-                        'message' => 'Cart updated successfully',
-                        'total' => number_format($total, 0)
-                    ]);
-                }
-
-                return redirect()->back()->with('success', 'Cart updated successfully');
+                return response()->json(['success' => true, 'total' => number_format($total, 0)]);
             }
         }
 
-        // If it's an AJAX request, return error
-        if ($request->ajax()) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Item not found in cart'
-            ]);
-        }
-
-        return redirect()->back()->with('error', 'Item not found in cart');
+        return response()->json(['success' => false, 'message' => 'Item not found']);
     }
-
 }

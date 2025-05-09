@@ -31,7 +31,7 @@
 
                     <div class="p-4 shadow rounded h-full max-w-sm min-w-3xs mx-auto flex flex-col">
                         <div class="grow">
-                            <h2 class="text-xl font-semibold truncate">{{ $product->name }}</h2>
+                            <h2 class="text-lg font-semibold truncate">{{ $product->name }}</h2>
                             <p class="text-gray-600 h-12 overflow-hidden">{{ $product->description }}</p>
                         </div>
 

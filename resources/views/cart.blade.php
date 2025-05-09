@@ -17,7 +17,7 @@
                 @php $total = 0; @endphp
                 @foreach($cart as $id => $item)
                     @php $total += $item['price'] * $item['quantity']; @endphp
-                    <div class="flex items-center p-4 border-b relative" x-data="{ quantity: {{ $item['quantity'] }} }">
+                    <div class="flex items-center p-4 border-b relative" data-cart-id="{{ $id }}">
                         <!-- Product Image -->
                         <div class="w-28 h-32 mr-4">
                             <img src="{{ asset('storage/' . $item['image_url']) }}" class="w-full h-full object-cover"
@@ -33,118 +33,117 @@
 
                         <!-- Quantity Controls -->
                         <div class="flex items-center mr-3 mt-14">
-                            <button type="button"
-                                x-on:click="quantity = Math.max(1, quantity - 1); $refs.q.value = quantity; $dispatch('quantity-updated', { cartId: '{{ $id }}', quantity })"
-                                class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300">
+                            <button type="button" onclick="updateQuantity('{{ $id }}', -1)"
+                                class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300"
+                                @if($item['quantity'] <= 1) disabled @endif>
                                 <i class="fa-solid fa-minus"></i>
                             </button>
-                            <span class="mx-3 w-5 text-center" x-text="quantity"></span>
-                            <button type="button"
-                                x-on:click="quantity++; $refs.q.value = quantity; $dispatch('quantity-updated', { cartId: '{{ $id }}', quantity })"
+
+                            <span class="mx-3 w-5 text-center cart-quantity">{{ $item['quantity'] }}</span>
+
+                            <button type="button" onclick="updateQuantity('{{ $id }}', 1)"
                                 class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300">
                                 <i class="fa-solid fa-plus"></i>
                             </button>
-                            <input type="hidden" x-ref="q" value="{{ $item['quantity'] }}">
-                        </div>
 
+                            <input type="hidden" id="update-quantity-{{ $id }}" value="{{ $item['quantity'] }}">
+                        </div>
 
                         <!-- Remove Button -->
                         <button type="button" onclick="removeItem('{{ $id }}')"
-                            class="absolute top-2 right-2  flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full">
-                            <i class="fa-solid fa-circle-xmark fa-1x"></i>
+                            class="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 rounded-full px-1">
+                            <i class="fa-solid fa-circle-xmark"></i>
                         </button>
                     </div>
                 @endforeach
 
-                <!-- Note Section -->
-                <div class="p-4 border-b flex items-center">
-                    <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 mr-3">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                            stroke="currentColor" class="w-5 h-5">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                        </svg>
-                    </button>
-                    <input type="text" placeholder="Leave a note with your order"
-                        class="w-full bg-transparent focus:outline-none">
-                </div>
-
                 <!-- Total Section -->
                 <div class="p-4 flex justify-between items-center">
                     <span class="font-bold text-lg">Total</span>
-                    <span class="font-bold text-lg">LKR {{ number_format($total, 0) }}</span>
+                    <span class="font-bold text-lg total-price">LKR {{ number_format($total, 0) }}</span>
                 </div>
             </div>
 
-            <!-- Action Buttons -->
+            <!-- Note Section -->
+            <div class="mt-3 p-3 border rounded-md flex items-center">
+                <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 mr-3">
+                <i class="fa-solid fa-plus"></i>
+                </button>
+                <input type="text" placeholder="Leave a note with your order" class="w-full bg-transparent focus:outline-none">
+            </div>
+
+            <!-- Buttons -->
             <div class="mt-6 space-y-3">
-                <button type="button" onclick="proceedToCheckout()"
-                    class="w-full bg-black text-white py-4 rounded font-semibold hover:bg-gray-800 transition">
-                    CHECK OUT
-                </button>
-                <button type="button" onclick="window.location.href='{{ route('shop') }}'"
-                    class="w-full bg-gray-100 text-black py-4 rounded font-semibold hover:bg-gray-200 transition">
-                    CONTINUE SHOPPING
-                </button>
+                <button onclick="proceedToCheckout()"
+                    class="w-full bg-black text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition">CHECK
+                    OUT</button>
+                <button onclick="window.location.href='{{ route('shop') }}'"
+                    class="w-full bg-gray-200 text-black py-4 rounded-full font-semibold hover:bg-gray-300 transition">CONTINUE
+                    SHOPPING</button>
             </div>
         @else
             <div class="text-center py-12">
                 <p class="text-xl mb-6">Your cart is empty.</p>
-                <a href="{{ route('shop.index') }}"
-                    class="inline-block bg-black text-white px-6 py-3 rounded font-semibold hover:bg-gray-800 transition">
-                    Continue Shopping
-                </a>
+                <a href="{{ route('cart.index') }}"
+                    class="inline-block bg-black text-white px-6 py-3 rounded font-semibold hover:bg-gray-800 transition">Continue
+                    Shopping</a>
             </div>
         @endif
     </div>
 
+    <!-- Hidden Forms -->
     <form id="removeItemForm" action="{{ route('cart.remove') }}" method="POST" style="display: none;">
         @csrf
         <input type="hidden" name="cart_id" id="remove_cart_id">
     </form>
 
-    <form id="updateQuantityForm" action="{{ route('cart.update') }}" method="POST" style="display: none;">
-        @csrf
-        <input type="hidden" name="cart_id" id="update_cart_id">
-        <input type="hidden" name="quantity" id="update_quantity">
-    </form>
-
     <script>
-        // For updating quantity in real-time
-        document.addEventListener('quantity-updated', function (event) {
-            const { cartId, quantity } = event.detail;
+        function updateQuantity(cartId, change) {
+            const input = document.querySelector(`#update-quantity-${cartId}`);
+            let newQty = parseInt(input.value) + change;
 
-            const form = document.getElementById('updateQuantityForm');
-            form.querySelector('#update_cart_id').value = cartId;
-            form.querySelector('#update_quantity').value = quantity;
+            if (newQty < 1) return;
 
-            const formData = new FormData(form);
-
-            fetch(form.action, {
+            fetch('{{ route('cart.update') }}', {
                 method: 'POST',
-                body: formData,
+                body: JSON.stringify({
+                    cart_id: cartId,
+                    quantity: newQty
+                }),
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    'Content-Type': 'application/json'
                 }
             })
-                .then(response => response.json())
+                .then(res => res.json())
                 .then(data => {
-                    if (data.success && data.total) {
-                        // Update total (if you wrap it in a span with a class)
+                    if (data.success) {
+                        // Update quantity display
+                        const container = document.querySelector(`[data-cart-id="${cartId}"]`);
+                        if (container) {
+                            container.querySelector('.cart-quantity').textContent = data.quantity;
+                            document.querySelector(`#update-quantity-${cartId}`).value = data.quantity;
+                        }
+
+                        // Update total price
                         const totalSpan = document.querySelector('.total-price');
                         if (totalSpan) totalSpan.textContent = 'LKR ' + data.total;
                     }
                 })
-                .catch(error => console.error('Error updating cart:', error));
-        });
-
-        // For removing items
-        function removeItem(cartId) {
-            document.getElementById('remove_cart_id').value = cartId;
-            document.getElementById('removeItemForm').submit();
+                .catch(err => {
+                    alert('Failed to update cart. Please try again.');
+                    console.error(err);
+                });
         }
 
-        // For checkout
+        function removeItem(cartId) {
+            if (confirm("Are you sure you want to remove this item?")) {
+                document.getElementById('remove_cart_id').value = cartId;
+                document.getElementById('removeItemForm').submit();
+            }
+        }
+
         function proceedToCheckout() {
             window.location.href = "{{ route('checkout') }}";
         }

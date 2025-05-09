@@ -74,7 +74,8 @@ Route::post('/cart/remove', [CartController::class, 'remove'])->name('cart.remov
 Route::post('/cart/update', [CartController::class, 'updateQuantity'])->name('cart.update');
 
 
-Route::post('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+Route::post('/cart/checkout', [CartController::class, 'checkout'])->name('cart.checkout');
+
 
 
 

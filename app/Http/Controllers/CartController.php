@@ -135,4 +135,28 @@ class CartController extends Controller
 
         return response()->json(['success' => false, 'message' => 'Item not found']);
     }
+
+    public function checkout(Request $request)
+    {
+        $selectedIds = $request->input('selected_items', []);
+        $note = $request->input('note');
+
+        if (empty($selectedIds)) {
+            return redirect()->back()->with('error', 'Please select at least one item to checkout.');
+        }
+
+        $cart = session()->get('cart', []);
+
+        $selectedCart = array_filter($cart, function ($key) use ($selectedIds) {
+            return in_array($key, $selectedIds);
+        }, ARRAY_FILTER_USE_KEY);
+
+        // Save selected items and note into session
+        session()->put('checkout_items', $selectedCart);
+        session()->put('checkout_note', $note);  // <-- Save note here
+
+        return redirect()->route('checkout');
+    }
+
+
 }

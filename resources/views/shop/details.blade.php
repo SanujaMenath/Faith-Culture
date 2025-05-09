@@ -116,9 +116,9 @@
                 <div class="flex items-center gap-4 mb-6">
                     <label class="font-medium">Quantity:</label>
                     <div class="flex border rounded-md">
-                        <button type="button" onclick="decrement()" class="px-3 py-2 hover:bg-gray-100 transition">−</button>
+                        <button type="button" onclick="decrement()" class="px-2 py-1 hover:bg-gray-100 transition">−</button>
                         <input type="number" id="quantity" name="quantity" min="1" value="1" class="w-16 text-center border-x" />
-                        <button type="button" onclick="increment()" class="px-3 py-2 hover:bg-gray-100 transition">+</button>
+                        <button type="button" onclick="increment()" class="px-2 py-1 hover:bg-gray-100 transition">+</button>
                     </div>
                 </div>
 

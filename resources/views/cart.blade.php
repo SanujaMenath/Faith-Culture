@@ -13,74 +13,84 @@
         @endif
 
         @if(!empty($cart) && count($cart) > 0)
-            <div class="bg-white shadow-sm rounded-lg">
-                @php $total = 0; @endphp
-                @foreach($cart as $id => $item)
-                    @php $total += $item['price'] * $item['quantity']; @endphp
-                    <div class="flex items-center p-4 border-b relative" data-cart-id="{{ $id }}">
-                        <!-- Product Image -->
-                        <div class="w-28 h-32 mr-4">
-                            <img src="{{ asset('storage/' . $item['image_url']) }}" class="w-full h-full object-cover"
-                                alt="{{ $item['name'] }}">
-                        </div>
+            <form id="checkoutForm" action="{{ route('cart.checkout') }}" method="POST">
+                <div class="bg-white shadow-sm rounded-lg">
+                    @php $total = 0; @endphp
+                    @foreach($cart as $id => $item)
+                        @php $total += $item['price'] * $item['quantity']; @endphp
+                        <div class="flex items-center p-4 border-b relative" data-cart-id="{{ $id }}">
+                            <!-- Checkbox -->
+                            <div class="mr-4 ">
+                                <input type="checkbox" name="selected_items[]" value="{{ $id }}" class="w-5 h-5 accent-gray-600">
+                            </div>
 
-                        <!-- Product Details -->
-                        <div class="flex-1">
-                            <h3 class="font-bold text-lg">{{ $item['name'] }}</h3>
-                            <p class="text-gray-500">{{ $item['color'] ?? 'N/A' }} / {{ $item['size'] ?? 'N/A' }}</p>
-                            <p class="font-semibold mt-1">LKR {{ number_format($item['price'], 0) }}</p>
-                        </div>
+                            <!-- Product Image -->
+                            <div class="w-28 h-32 mr-4">
+                                <img src="{{ asset('storage/' . $item['image_url']) }}" class="w-full h-full object-cover"
+                                    alt="{{ $item['name'] }}">
+                            </div>
 
-                        <!-- Quantity Controls -->
-                        <div class="flex items-center mr-3 mt-14">
-                            <button type="button" onclick="updateQuantity('{{ $id }}', -1)"
-                                class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300"
-                                @if($item['quantity'] <= 1) disabled @endif>
-                                <i class="fa-solid fa-minus"></i>
+                            <!-- Product Details -->
+                            <div class="flex-1">
+                                <h3 class="font-bold text-lg">{{ $item['name'] }}</h3>
+                                <p class="text-gray-500">{{ $item['color'] ?? 'N/A' }} / {{ $item['size'] ?? 'N/A' }}</p>
+                                <p class="font-semibold mt-1">LKR {{ number_format($item['price'], 0) }}</p>
+                            </div>
+
+                            <!-- Quantity Controls -->
+                            <div class="flex items-center mr-3 mt-14">
+                                <button type="button" onclick="updateQuantity('{{ $id }}', -1)"
+                                    class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300"
+                                    @if($item['quantity'] <= 1) disabled @endif>
+                                    <i class="fa-solid fa-minus"></i>
+                                </button>
+
+                                <span class="mx-3 w-5 text-center cart-quantity">{{ $item['quantity'] }}</span>
+
+                                <button type="button" onclick="updateQuantity('{{ $id }}', 1)"
+                                    class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300">
+                                    <i class="fa-solid fa-plus"></i>
+                                </button>
+
+                                <input type="hidden" id="update-quantity-{{ $id }}" value="{{ $item['quantity'] }}">
+                            </div>
+
+                            <!-- Remove Button -->
+                            <button type="button" onclick="removeItem('{{ $id }}')"
+                                class="absolute top-2 right-2 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full p-1">
+                                <i class="fa-solid fa-circle-xmark"></i>
                             </button>
-
-                            <span class="mx-3 w-5 text-center cart-quantity">{{ $item['quantity'] }}</span>
-
-                            <button type="button" onclick="updateQuantity('{{ $id }}', 1)"
-                                class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300">
-                                <i class="fa-solid fa-plus"></i>
-                            </button>
-
-                            <input type="hidden" id="update-quantity-{{ $id }}" value="{{ $item['quantity'] }}">
                         </div>
+                    @endforeach
 
-                        <!-- Remove Button -->
-                        <button type="button" onclick="removeItem('{{ $id }}')"
-                            class="absolute top-2 right-2 bg-gray-100 hover:bg-gray-200 rounded-full px-1">
-                            <i class="fa-solid fa-circle-xmark"></i>
-                        </button>
+                    <!-- Total Section -->
+                    <div class="p-4 flex justify-between items-center">
+                        <span class="font-bold text-lg">Total</span>
+                        <span class="font-bold text-lg total-price">LKR {{ number_format($total, 0) }}</span>
                     </div>
-                @endforeach
-
-                <!-- Total Section -->
-                <div class="p-4 flex justify-between items-center">
-                    <span class="font-bold text-lg">Total</span>
-                    <span class="font-bold text-lg total-price">LKR {{ number_format($total, 0) }}</span>
                 </div>
-            </div>
 
-            <!-- Note Section -->
-            <div class="mt-3 p-3 border rounded-md flex items-center">
-                <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 mr-3">
-                <i class="fa-solid fa-plus"></i>
-                </button>
-                <input type="text" placeholder="Leave a note with your order" class="w-full bg-transparent focus:outline-none">
-            </div>
+                <!-- Note Section -->
+                <div class="mt-3 p-3 border rounded-md flex items-center">
+                    <button class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded-full hover:bg-gray-200 mr-3">
+                        <i class="fa-solid fa-plus"></i>
+                    </button>
+                    <input type="text" placeholder="Leave a note with your order" name="note"
+                        class="w-full bg-transparent focus:outline-none" value="{{ old('note') }}">
+                </div>
 
-            <!-- Buttons -->
-            <div class="mt-6 space-y-3">
-                <button onclick="proceedToCheckout()"
-                    class="w-full bg-black text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition">CHECK
-                    OUT</button>
-                <button onclick="window.location.href='{{ route('shop') }}'"
-                    class="w-full bg-gray-200 text-black py-4 rounded-full font-semibold hover:bg-gray-300 transition">CONTINUE
-                    SHOPPING</button>
-            </div>
+                <!-- Checkout or Shopping -->
+                @csrf
+                <div class="mt-6 space-y-3">
+                    <button type="submit"
+                        class="w-full bg-black text-white py-4 rounded-full font-semibold hover:bg-gray-800 transition">CHECK
+                        OUT</button>
+                    <button type="button" onclick="window.location.href='{{ route('shop') }}'"
+                        class="w-full bg-gray-200 text-black py-4 rounded-full font-semibold hover:bg-gray-300 transition">CONTINUE
+                        SHOPPING</button>
+                </div>
+            </form>
+
         @else
             <div class="text-center py-12">
                 <p class="text-xl mb-6">Your cart is empty.</p>
@@ -145,7 +155,7 @@
         }
 
         function proceedToCheckout() {
-            window.location.href = "{{ route('checkout') }}";
+            window.location.href = "{{ route('cart.checkout') }}";
         }
     </script>
 @endsection

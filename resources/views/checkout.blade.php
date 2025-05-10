@@ -8,10 +8,10 @@
         @if($cartItems->isEmpty())
             <div class="text-center text-gray-600">No items to checkout.</div>
         @else
-            <form action="{{ route('order.place') }}" method="POST" class="bg-white rounded shadow">
+            <form action="{{ route('order.place') }}" method="POST" class="bg-white rounded-xl border-y-2 shadow-2xl">
                 @csrf
                 
-                <div class="flex flex-col md:flex-row">
+                <div class="flex flex-col md:flex-row ">
                     <!-- Left Column: Delivery Information -->
                     <div class="w-full md:w-3/5 p-6 border-r">
                         <h2 class="text-2xl font-bold mb-6">Delivery Information</h2>
@@ -97,7 +97,7 @@
                     </div>
                     
                     <!-- Right Column: Order Summary -->
-                    <div class="w-full md:w-2/5 p-6 bg-gray-50">
+                    <div class="w-full md:w-2/5 p-6 bg-gray-50 shadow-lg rounded-xl ">
                         <h2 class="text-2xl font-bold mb-4">Order Summary</h2>
                         <div class="space-y-4 max-h-80 overflow-y-auto pr-2 mb-6">
                             @php $subtotal = 0; @endphp

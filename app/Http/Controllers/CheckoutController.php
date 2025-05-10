@@ -3,12 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cart;
+use App\Models\Inventory;
 use App\Models\Product;
 use Auth;
 use Illuminate\Http\Request;
 
 class CheckoutController extends Controller
 {
+
+
     public function index()
     {
         $sessionCart = session('checkout_items', []);
@@ -17,24 +20,14 @@ class CheckoutController extends Controller
             return redirect()->route('cart.index')->with('error', 'No items found in checkout session.');
         }
 
-        // Make sure product_id exists
-        $productIds = [];
-        foreach ($sessionCart as $item) {
-            if (isset($item['product_id'])) {
-                $productIds[] = $item['product_id'];
-            }
-        }
-
-        $products = Product::whereIn('id', $productIds)->get()->keyBy('id');
-
-        $cartItems = collect($sessionCart)->map(function ($item) use ($products) {
-            $product = $products->get($item['product_id'] ?? null);
-            $item['product'] = $product;
-            return $item;
-        });
+        $cartItems = Cart::with(['inventory.product', 'inventory.color', 'inventory.size'])
+            ->whereIn('id', $sessionCart)
+            ->get();
 
         return view('checkout', compact('cartItems'));
     }
+
+
 
 
     public function processCheckout(Request $request)

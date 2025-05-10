@@ -16,14 +16,10 @@ class Cart extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function product()
-    {
-        return $this->belongsTo(Product::class);
-    }
 
     public function inventory()
     {
-        return $this->belongsTo(\App\Models\Inventory::class, 'inventory_id');
+        return $this->belongsTo(Inventory::class, 'inventory_id');
     }
 
 

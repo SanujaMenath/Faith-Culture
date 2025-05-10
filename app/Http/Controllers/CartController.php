@@ -137,26 +137,23 @@ class CartController extends Controller
     }
 
     public function checkout(Request $request)
-{
-    $selectedIds = $request->input('selected_items', []);
-    $note = $request->input('note');
+    {
+        $selectedIds = $request->input('selected_items', []);
+        $note = $request->input('note');
 
-    if (empty($selectedIds)) {
-        return redirect()->back()->with('error', 'Please select at least one item to checkout.');
+        if (empty($selectedIds)) {
+            return redirect()->back()->with('error', 'Please select at least one item to checkout.');
+        }
+
+        $cart = session()->get('cart', []);
+
+        $selectedCart = array_unique(array_merge($cart, $selectedIds));
+
+        session()->put('checkout_items', $selectedCart);
+        session()->put('checkout_note', $note);
+        
+        return redirect()->route('checkout.index')->with('success', 'Items ready for checkout.');
     }
-
-    $cart = session()->get('cart', []);
-
-      $selectedCart = array_filter($cart, function ($key) use ($selectedIds) {
-            return in_array($key, $selectedIds);
-        }, ARRAY_FILTER_USE_KEY);
-
-    session()->put('checkout_items', $selectedCart);
-    session()->put('checkout_note', $note);
-
-
-    return redirect()->route('checkout.index')->with('success', 'Items ready for checkout.');
-}
 
 
 

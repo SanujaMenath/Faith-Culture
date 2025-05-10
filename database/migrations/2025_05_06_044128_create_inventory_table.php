@@ -10,12 +10,12 @@ return new class extends Migration {
         Schema::create('inventory', function (Blueprint $table) {
             $table->id();
             $table->foreignId('product_id')->constrained()->onDelete('cascade');
-            $table->string('color', 50);
-            $table->string('size', 10);
-            $table->string('sku', 100)->nullable()->unique();
+             $table->string('sku', 100)->unique()->nullable();
             $table->integer('stock_quantity')->default(0);
-            $table->decimal('price', 8, 2)->nullable(); // Variant-specific price
-            $table->string('image_url', 191)->nullable(); // Optional variant image
+            $table->decimal('price', 8, 2)->nullable();
+            $table->string('image_url', 191)->nullable();
+            $table->foreignId('color_id')->constrained('colors')->onDelete('cascade');
+            $table->foreignId('size_id')->constrained('sizes')->onDelete('cascade');
             $table->timestamps();
         });
     }

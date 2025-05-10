@@ -154,8 +154,5 @@
             }
         }
 
-        function proceedToCheckout() {
-            window.location.href = "{{ route('cart.checkout') }}";
-        }
     </script>
 @endsection

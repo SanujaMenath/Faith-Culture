@@ -79,6 +79,8 @@ Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout.in
 
 Route::post('/checkout', [CheckoutController::class, 'processCheckout'])->name('order.place');
 Route::get('view-orders', [OrderController::class, 'showOrders'])->name('orders.show');
-Route::get('/order', [OrderController::class, 'placeOrder'])->name('orders.confirm');
 
+Route::get('/checkout/success', [OrderController::class, 'checkoutSuccess'])->name('checkout.success');
+Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
+Route::get('/order', [OrderController::class, 'confirmOrder'])->name('orders.confirm');

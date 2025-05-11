@@ -10,12 +10,12 @@
         @else
             <form action="{{ route('order.place') }}" method="POST" class="bg-white rounded-xl border-y-2 shadow-2xl">
                 @csrf
-                
+
                 <div class="flex flex-col md:flex-row ">
                     <!-- Left Column: Delivery Information -->
                     <div class="w-full md:w-3/5 p-6 border-r">
                         <h2 class="text-2xl font-bold mb-6">Delivery Information</h2>
-                        
+
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label for="full_name" class="block font-semibold">Full Name</label>
@@ -50,20 +50,22 @@
                             <input type="text" id="postal_code" name="postal_code"
                                 class="w-full mt-1 border border-gray-300 rounded px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black">
                         </div>
-                        
+
                         <!-- Payment Method -->
                         <div class="mt-6">
                             <label class="block font-semibold mb-2">Payment Method</label>
                             <div class="space-y-3">
                                 <label class="flex items-center p-3 border rounded hover:bg-gray-50 cursor-pointer">
-                                    <input type="radio" name="payment_method" value="cod" required class="form-radio text-black mr-3">
+                                    <input type="radio" name="payment_method" value="cod" required
+                                        class="form-radio text-black mr-3">
                                     <div>
                                         <span class="font-medium">Cash on Delivery</span>
                                         <p class="text-sm text-gray-500">Pay when your order arrives</p>
                                     </div>
                                 </label>
                                 <label class="flex items-center p-3 border rounded hover:bg-gray-50 cursor-pointer">
-                                    <input type="radio" name="payment_method" value="card" required class="form-radio text-black mr-3">
+                                    <input type="radio" name="payment_method" value="card" required
+                                        class="form-radio text-black mr-3">
                                     <div class="flex-1">
                                         <div class="flex justify-between items-center">
                                             <span class="font-medium">Card Payment</span>
@@ -77,10 +79,11 @@
                                 </label>
                             </div>
                         </div>
-                        
+
                         <!-- Special Instructions -->
                         <div class="mt-6">
-                            <label for="special_instructions" class="block font-semibold">Special Instructions (optional)</label>
+                            <label for="special_instructions" class="block font-semibold">Special Instructions
+                                (optional)</label>
                             <textarea id="special_instructions" name="special_instructions" rows="2"
                                 class="w-full mt-1 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-black"
                                 placeholder="Any special instructions for delivery"></textarea>
@@ -95,7 +98,7 @@
                             </label>
                         </div>
                     </div>
-                    
+
                     <!-- Right Column: Order Summary -->
                     <div class="w-full md:w-2/5 p-6 bg-gray-50 shadow-lg rounded-xl ">
                         <h2 class="text-2xl font-bold mb-4">Order Summary</h2>
@@ -114,8 +117,7 @@
                                 <div class="flex justify-between items-center border-b pb-4">
                                     <div class="flex items-start gap-3">
                                         @if($product && $inventory->image_url)
-                                            <img src="{{ asset('storage/' . $inventory->image_url) }}" 
-                                                alt="{{ $product->name }}" 
+                                            <img src="{{ asset('storage/' . $inventory->image_url) }}" alt="{{ $product->name }}"
                                                 class="w-16 h-20 object-cover rounded">
                                         @else
                                             <div class="w-16 h-16 bg-gray-200 rounded flex items-center justify-center">
@@ -144,12 +146,12 @@
                                 $freeThreshold = 20000;
                                 $isFreeEligible = $subtotal >= $freeThreshold;
                             @endphp
-                            
+
                             <div class="space-y-3">
-                                <label class="flex items-start p-3 border rounded cursor-pointer hover:bg-white transition" 
-                                       onclick="updateDeliveryCharge('standard')">
-                                    <input type="radio" name="delivery_option" value="standard" checked 
-                                           class="form-radio mt-1 text-black mr-3">
+                                <label class="flex items-start p-3 border rounded cursor-pointer hover:bg-white transition"
+                                    onclick="updateDeliveryCharge('standard')">
+                                    <input type="radio" name="delivery_option" value="standard" checked
+                                        class="form-radio mt-1 text-black mr-3">
                                     <div class="flex-1">
                                         <div class="flex justify-between">
                                             <span class="font-medium">Standard Delivery</span>
@@ -158,11 +160,11 @@
                                         <p class="text-sm text-gray-500 mt-1">Delivery within 3-5 business days</p>
                                     </div>
                                 </label>
-                                
+
                                 <label class="flex items-start p-3 border rounded cursor-pointer hover:bg-white transition"
-                                       onclick="updateDeliveryCharge('express')">
-                                    <input type="radio" name="delivery_option" value="express" 
-                                           class="form-radio mt-1 text-black mr-3">
+                                    onclick="updateDeliveryCharge('express')">
+                                    <input type="radio" name="delivery_option" value="express"
+                                        class="form-radio mt-1 text-black mr-3">
                                     <div class="flex-1">
                                         <div class="flex justify-between">
                                             <span class="font-medium">Express Delivery</span>
@@ -171,20 +173,21 @@
                                         <p class="text-sm text-gray-500 mt-1">Delivery within 1-2 business days</p>
                                     </div>
                                 </label>
-                                
+
                                 @if($isFreeEligible)
-                                <label class="flex items-start p-3 border rounded cursor-pointer hover:bg-white transition"
-                                       onclick="updateDeliveryCharge('free')">
-                                    <input type="radio" name="delivery_option" value="free" 
-                                           class="form-radio mt-1 text-black mr-3">
-                                    <div class="flex-1">
-                                        <div class="flex justify-between">
-                                            <span class="font-medium">Free Delivery</span>
-                                            <span class="font-medium">Rs. 0.00</span>
+                                    <label class="flex items-start p-3 border rounded cursor-pointer hover:bg-white transition"
+                                        onclick="updateDeliveryCharge('free')">
+                                        <input type="radio" name="delivery_option" value="free"
+                                            class="form-radio mt-1 text-black mr-3">
+                                        <div class="flex-1">
+                                            <div class="flex justify-between">
+                                                <span class="font-medium">Free Delivery</span>
+                                                <span class="font-medium">Rs. 0.00</span>
+                                            </div>
+                                            <p class="text-sm text-gray-500 mt-1">Free delivery for orders over Rs. 20,000 (5-7
+                                                business days)</p>
                                         </div>
-                                        <p class="text-sm text-gray-500 mt-1">Free delivery for orders over Rs. 20,000 (5-7 business days)</p>
-                                    </div>
-                                </label>
+                                    </label>
                                 @endif
                             </div>
                         </div>
@@ -196,7 +199,7 @@
                                 $defaultDeliveryFee = $isFreeEligible ? 0 : $standardDelivery;
                                 $total = $subtotal + $defaultDeliveryFee;
                             @endphp
-                            
+
                             <div class="space-y-2">
                                 <div class="flex justify-between">
                                     <span>Subtotal:</span>
@@ -230,15 +233,18 @@
         function updateDeliveryCharge(option) {
             const subtotal = {{ $subtotal ?? 0 }};
             let deliveryFee = {{ $standardDelivery }};
-            
+
+
             if (option === 'express') {
                 deliveryFee = {{ $expressDelivery }};
             } else if (option === 'free') {
                 deliveryFee = 0;
             }
-            
+
             document.getElementById('delivery-fee').textContent = 'Rs. ' + deliveryFee.toFixed(2);
             document.getElementById('total-amount').textContent = 'Rs. ' + (subtotal + deliveryFee).toFixed(2);
         }
+
+        
     </script>
 @endsection

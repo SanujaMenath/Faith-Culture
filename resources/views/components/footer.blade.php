@@ -8,10 +8,10 @@
                 <p class="mb-4">Inspiring faith and community through shared values and thoughtful content.</p>
                 <!-- Social Media Icons -->
                 <div class="flex space-x-6 mt-4">
-                    <a href="#" class="transition-colors duration-300 hover:text-blue-600">
+                    <a href="https://www.facebook.com/faithculture" class="transition-colors duration-300 hover:text-blue-600">
                         <i class="fa-brands fa-facebook fa-2x"></i>
                     </a>
-                    <a href="#" class="transition-colors duration-300 hover:text-pink-600">
+                    <a href="https://www.instagram.com/faithculture._?igsh=eTBmd3Fwcm85Y3Zz" target="_blank" class="transition-colors duration-300 hover:text-pink-600">
                         <i class="fa-brands fa-instagram fa-2x"></i>
                     </a>
                     <a href="#" class="transition-colors duration-300 hover:text-green-600">

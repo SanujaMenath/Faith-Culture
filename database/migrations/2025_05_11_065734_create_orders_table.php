@@ -14,6 +14,8 @@ return new class extends Migration {
             $table->id();
             $table->foreignId('inventory_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->email('email')->nullable();
+            $table->string('telephone');
             $table->decimal('price', 10, 2);
             $table->string('payment_status')->default('pending');
             $table->string('shipping_address');

@@ -3,7 +3,7 @@
 @section('title', 'Orders - Faith Culture')
 
 @section('content')
-    <section class="h-screen">
+    <section class="">
         <div class="mx-auto px-8 py-8">
             <h1 class="text-3xl font-bold mb-6">Your Orders</h1>
 

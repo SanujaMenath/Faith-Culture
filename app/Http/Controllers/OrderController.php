@@ -30,18 +30,20 @@ class OrderController extends Controller
         if ($cartItems->isEmpty()) {
             return redirect()->route('cart.index')->with('error', 'Your cart is empty.');
         }
-
-        $shippingAddress = session('shipping_address');
+        
 
         // Save order logic
         foreach ($cartItems as $item) {
             Order::create([
                 'user_id' => $user->id,
                 'inventory_id' => $item->inventory_id,
+                'email' => session('email'),
+                'telephone' => session('telephone'),
                 'quantity' => $item->quantity,
                 'price' => $item->inventory->price,
-                'shipping_address' => $shippingAddress,
+                'shipping_address' => session('shipping_address'),
                 'payment_status' => 'paid',
+                'special_instructions' => trim((session('special_instructions') ?? '') . "\n" . (session('checkout_note') ?? '')),
             ]);
         }
 

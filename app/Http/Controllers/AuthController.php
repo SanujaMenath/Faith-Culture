@@ -2,38 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
 {
-    public function showLogin() {
-        return view('auth.auth'); 
+    public function showLogin()
+    {
+        return view('auth.auth');
     }
-    
-    public function register(Request $request) {
+
+    public function register(Request $request)
+    {
         $validated = $request->validate([
             'name' => 'required',
             'email' => 'required|email|unique:users',
             'password' => 'required|confirmed|min:6',
         ]);
-    
+
         $user = \App\Models\User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => bcrypt($validated['password']),
             'role' => 'USER',
         ]);
-    
+
+        event(new Registered($user));
+
         auth()->login($user);
-        return redirect()->route('login.form')->with('status', 'Registration successful! Please log in.');
+         return redirect()->route('verification.notice');
     }
-    
-    public function login(Request $request) {
+
+    public function login(Request $request)
+    {
         $credentials = $request->validate([
             'email' => 'required|email',
             'password' => 'required',
         ]);
-    
+
         if (auth()->attempt($credentials)) {
             $request->session()->regenerate();
             return match (auth()->user()->role) {
@@ -42,15 +48,16 @@ class AuthController extends Controller
                 default => redirect('/'),
             };
         }
-    
+
         return redirect()->route('login.form')->with('status', 'Unuccessful attempt! Please Try Again.');
     }
-    
-    public function logout(Request $request) {
+
+    public function logout(Request $request)
+    {
         auth()->logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
         return redirect()->route('login.form');
     }
-    
+
 }

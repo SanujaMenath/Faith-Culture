@@ -7,9 +7,6 @@
             <a href="{{ route('admin.addCategory') }}" class="block hover:text-yellow-300">Add Category</a>
             <a href="{{ route('admin.addProducts') }}" class="block hover:text-yellow-300">Add Products</a>
             <a href="{{ route('admin.inventory') }}" class="block hover:text-yellow-300">Manage Inventory</a>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button type="submit" class="mt-6 text-red-400 hover:text-red-600">Logout</button>
-            </form>
+            <a href="/logout" class="mt-6 text-red-400 hover:text-red-600">Logout</a>
         </nav>
     </aside>

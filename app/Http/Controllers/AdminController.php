@@ -73,8 +73,9 @@ class AdminController extends Controller
     $colors = Color::with('inventories')->get();
     $sizes = Size::with('inventories')->get();
     $products = Product::with('inventories')->get();
+    $inventories = Inventory::with(['product', 'color', 'size'])->get();
 
-    return view('admin.inventory', compact('products', 'colors', 'sizes'));
+    return view('admin.inventory', compact('products', 'colors', 'sizes', 'inventories'));
 }
 
 public function manageInventory(Request $request)

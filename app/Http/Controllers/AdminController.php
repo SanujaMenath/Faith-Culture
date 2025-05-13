@@ -42,8 +42,9 @@ class AdminController extends Controller
     }
     public function showAddProductsForm()
     {
+        $products = Product::all();
         $categories = Category::all();
-        return view('admin.addProducts', compact('categories'));
+        return view('admin.addProducts', compact('categories', 'products'));
     }
     public function addProduct(Request $request)
     {

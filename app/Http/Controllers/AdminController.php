@@ -24,7 +24,8 @@ class AdminController extends Controller
 
     public function showAddCategoryForm()
     {
-        return view('admin.addCategory');
+        $categories = Category::all();
+        return view('admin.addCategory', compact('categories'));
     }
 
     public function addCategory(Request $request)

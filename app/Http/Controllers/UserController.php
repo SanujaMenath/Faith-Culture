@@ -12,12 +12,23 @@ class UserController extends Controller
             return redirect()->route('login');
         }
 
-     
+
     }
 
     public function profile()
     {
-        return view('profile');
+
+        switch (auth()->user()->role) {
+            case 'ADMIN':
+                return redirect('/admin/dashboard');
+            case 'STAFF':
+                return redirect('/staff/dashboard');
+            case 'USER':
+                return redirect()->route('profile');
+            default:
+                abort(403, 'Unauthorized action.');
+        }
+
     }
 
 }

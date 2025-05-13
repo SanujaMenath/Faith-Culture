@@ -19,7 +19,7 @@ class AdminController extends Controller
 
     public function editProfile()
     {
-        return view('profile');
+        return view('admin.profile');
     }
 
     public function showAddCategoryForm()

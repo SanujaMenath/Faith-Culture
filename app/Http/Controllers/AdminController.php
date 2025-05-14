@@ -164,7 +164,8 @@ class AdminController extends Controller
 
     public function showCreateStaffForm()
     {
-        return view('admin.createStaff');
+        $staffs = User::where('role', 'STAFF')->get();
+        return view('admin.createStaff', compact('staffs'));
     }
 
     public function createStaff(Request $request)

@@ -72,6 +72,8 @@ Route::get('/admin/manage-inventory', [AdminController::class, 'viewInventory'])
 Route::post('/admin/manage-inventory', [AdminController::class, 'manageInventory'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageInventory');
 Route::get('admin/manage-sizes', [AdminController::class, 'showAddSizeForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageSizes');
 Route::post('admin/manage-sizes', [AdminController::class, 'addSize'])->middleware(['auth', 'role:ADMIN'])->name('admin.addSizeForm');
+Route::get('admin/manage-colors', [AdminController::class, 'showAddColorForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageColors');
+Route::post('admin/manage-colors', [AdminController::class, 'addColor'])->middleware(['auth', 'role:ADMIN'])->name('admin.addColorForm');
 // Manage staff
 Route::get('/admin/create-staff', [AdminController::class, 'showCreateStaffForm'])->name('admin.staffs');
 Route::post('/admin/create-staff', [AdminController::class, 'createStaff'])->name('admin.createStaff');

@@ -140,7 +140,7 @@ class AdminController extends Controller
     public function showAddColorForm()
     {
         $colors = Color::all();
-        return view('admin.addColor', compact('colors'));
+        return view('admin.manageColors', compact('colors'));
     }
     public function addColor(Request $request)
     {

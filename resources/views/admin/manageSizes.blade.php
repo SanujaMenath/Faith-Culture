@@ -42,10 +42,10 @@
             </div>
             <!-- Sizes List Section -->
             <div>
-                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4">All Sizes</h2>
+                <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 my-8">All Sizes</h2>
                 <!-- Responsive Table -->
-                <div class="overflow-x-auto hidden sm:block bg-white shadow-md rounded">
-                    <table class="min-w-xl divide-y divide-gray-200">
+                <div class="overflow-x-auto max-w-2xl bg-white shadow-md rounded mx-auto">
+                    <table class="w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th scope="col"
@@ -77,28 +77,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                </div>
-                <!-- Mobile View -->
-                <div class="sm:hidden bg-white shadow-md rounded">
-                    <ul class="divide-y divide-gray-200">
-                        @foreach ($sizes as $size)
-                            <li class="px-4 sm:px-6 py-4">
-                                <div class="flex items
-                                    justify-between text-sm sm:text-base text-gray-900">
-                                    <span class="font-medium">{{ $size->name }}</span>
-                                    <form action="" method="POST"
-                                        class="inline">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit"
-                                            class="text-red-600 hover:text-red-900 font-bold">Delete</button>
-                                    </form>
-                                </div>
-                                
-                            </li>
-                        @endforeach
-                    </ul>
-                </div>
+                </div> 
             </div>
         </div>
     </div>

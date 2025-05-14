@@ -1,6 +1,6 @@
 <header class="fixed top-0 left-0 right-0 w-full py-2 bg-white shadow-md z-50">
   <!-- Desktop and Large Screen Layout -->
-  <div class=" mx-auto lg:mx-8  px-4">
+  <div class="mx-auto lg:mx-8 px-4">
     <!-- Desktop Layout (hidden on mobile) -->
     <div class="hidden md:flex items-center justify-between">
       <!-- Logo and Brand Name (Left) -->
@@ -14,27 +14,27 @@
       <!-- Navigation Links (Center) -->
       <nav class="flex items-center justify-center gap-3">
         <a href="/"
-          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900">
+          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900 {{ request()->is('/') ? 'active border-gray-900 bg-gray-700 text-white' : '' }}">
           <span
-            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0"></span>
+            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0 {{ request()->is('/') ? 'scale-x-100' : '' }}"></span>
           <span class="relative z-10">Home</span>
         </a>
         <a href="/shop"
-          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900">
+          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900 {{ request()->is('shop*') ? 'active border-gray-900 bg-gray-700 text-white' : '' }}">
           <span
-            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0"></span>
+            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0 {{ request()->is('shop*') ? 'scale-x-100' : '' }}"></span>
           <span class="relative z-10">Shop</span>
         </a>
         <a href="/view-orders"
-          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900">
+          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900 {{ request()->is('view-orders*') ? 'active border-gray-900 bg-gray-700 text-white' : '' }}">
           <span
-            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0"></span>
+            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0 {{ request()->is('view-orders*') ? 'scale-x-100' : '' }}"></span>
           <span class="relative z-10">Orders</span>
         </a>
         <a href="/about"
-          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900">
+          class="relative px-3 py-1 font-medium text-black bg-gray-100 border-2 border-transparent rounded-lg transition-all overflow-hidden group hover:text-white hover:border-gray-900 {{ request()->is('about*') ? 'active border-gray-900 bg-gray-700 text-white' : '' }}">
           <span
-            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0"></span>
+            class="absolute inset-0 bg-gray-700 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-right group-hover:origin-left z-0 {{ request()->is('about*') ? 'scale-x-100' : '' }}"></span>
           <span class="relative z-10">About Us</span>
         </a>
       </nav>
@@ -140,12 +140,12 @@
   </div>
 
   <!-- Mobile Navigation Menu (Hidden by default) -->
-  <div id="mobile-menu" class="md:hidden hidden bg-white border-t mt-2 ">
+  <div id="mobile-menu" class="md:hidden hidden bg-white border-t mt-2">
     <nav class="py-2">
-      <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Home</a>
-      <a href="/shop" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Shop</a>
-      <a href="/view-orders" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Orders</a>
-      <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">About Us</a>
+      <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->is('/') ? 'bg-gray-100 font-semibold text-gray-900' : '' }}">Home</a>
+      <a href="/shop" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->is('shop*') ? 'bg-gray-100 font-semibold text-gray-900' : '' }}">Shop</a>
+      <a href="/view-orders" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->is('view-orders*') ? 'bg-gray-100 font-semibold text-gray-900' : '' }}">Orders</a>
+      <a href="/about" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->is('about*') ? 'bg-gray-100 font-semibold text-gray-900' : '' }}">About Us</a>
     </nav>
   </div>
 </header>

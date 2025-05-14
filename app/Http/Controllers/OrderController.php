@@ -8,13 +8,13 @@ use Stripe\Stripe;
 
 class OrderController extends Controller
 {
-    public function index()
-    {
-        return view('orders');
-    }
+    
 
     public function showOrders()
     {
+        if(!auth()->check()) {
+            return redirect()->route('login.form')->with('error', 'Please login to view your orders.');
+        }
         $user = auth()->user();
         $orders = Order::with('inventory.product')->where('user_id', $user->id)->latest()->get();
 

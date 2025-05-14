@@ -55,7 +55,7 @@ class AdminController extends Controller
             'category_id' => 'nullable|exists:categories,id',
         ]);
 
-       
+
 
         // 3. Create product
         Product::create([
@@ -69,56 +69,91 @@ class AdminController extends Controller
     }
 
     public function viewInventory()
-{
-    $colors = Color::with('inventories')->get();
-    $sizes = Size::with('inventories')->get();
-    $products = Product::with('inventories')->get();
-    $inventories = Inventory::with(['product', 'color', 'size'])->get();
+    {
+        $colors = Color::with('inventories')->get();
+        $sizes = Size::with('inventories')->get();
+        $products = Product::with('inventories')->get();
+        $inventories = Inventory::with(['product', 'color', 'size'])->get();
 
-    return view('admin.inventory', compact('products', 'colors', 'sizes', 'inventories'));
-}
-
-public function manageInventory(Request $request)
-{
-    $request->validate([
-        'product_id' => 'required|exists:products,id',
-        'color_id' => 'required|exists:colors,id',
-        'size_id' => 'required|exists:sizes,id',
-        'stock_quantity' => 'required|integer|min:0',
-        'price' => 'required|numeric|min:0',
-        'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
-    ]);
-
-    // Check if inventory variant already exists
-    $existing = Inventory::where([
-        'product_id' => $request->product_id,
-        'color_id' => $request->color_id,
-        'size_id' => $request->size_id,
-    ])->first();
-
-    if ($existing) {
-        return back()->withErrors(['duplicate' => 'This product variant already exists in inventory.']);
+        return view('admin.inventory', compact('products', 'colors', 'sizes', 'inventories'));
     }
 
-    // Handle image upload
-    $imagePath = null;
-    if ($request->hasFile('image_url')) {
-        $imageName = time() . '.' . $request->file('image_url')->getClientOriginalExtension();
-        $request->file('image_url')->storeAs('public/products', $imageName);
-        $imagePath = 'products/' . $imageName;
+    public function manageInventory(Request $request)
+    {
+        $request->validate([
+            'product_id' => 'required|exists:products,id',
+            'color_id' => 'required|exists:colors,id',
+            'size_id' => 'required|exists:sizes,id',
+            'stock_quantity' => 'required|integer|min:0',
+            'price' => 'required|numeric|min:0',
+            'image_url' => 'nullable|image|mimes:jpg,jpeg,png|max:5120',
+        ]);
+
+        // Check if inventory variant already exists
+        $existing = Inventory::where([
+            'product_id' => $request->product_id,
+            'color_id' => $request->color_id,
+            'size_id' => $request->size_id,
+        ])->first();
+
+        if ($existing) {
+            return back()->withErrors(['duplicate' => 'This product variant already exists in inventory.']);
+        }
+
+        // Handle image upload
+        $imagePath = null;
+        if ($request->hasFile('image_url')) {
+            $imageName = time() . '.' . $request->file('image_url')->getClientOriginalExtension();
+            $request->file('image_url')->storeAs('public/products', $imageName);
+            $imagePath = 'products/' . $imageName;
+        }
+
+        // Save new inventory
+        Product::find($request->product_id)->inventories()->create([
+            'color_id' => $request->color_id,
+            'size_id' => $request->size_id,
+            'stock_quantity' => $request->stock_quantity,
+            'price' => $request->price,
+            'image_url' => $imagePath,
+        ]);
+
+        return back()->with('success', 'Inventory updated successfully.');
     }
 
-    // Save new inventory
-    Product::find($request->product_id)->inventories()->create([
-        'color_id' => $request->color_id,
-        'size_id' => $request->size_id,
-        'stock_quantity' => $request->stock_quantity,
-        'price' => $request->price,
-        'image_url' => $imagePath,
-    ]);
+    public function showAddSizeForm()
+    {
+        $sizes = Size::all();
+        return view('admin.manageSizes', compact('sizes'));
+    }
+    public function addSize(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
 
-    return back()->with('success', 'Inventory updated successfully.');
-}
+        Size::create([
+            'name' => $request->name
+        ]);
+
+        return back()->with('success', 'Size added');
+    }
+    public function showAddColorForm()
+    {
+        $colors = Color::all();
+        return view('admin.addColor', compact('colors'));
+    }
+    public function addColor(Request $request)
+    {
+        $request->validate([
+            'name' => 'required|string|max:255'
+        ]);
+
+        Color::create([
+            'name' => $request->name
+        ]);
+
+        return back()->with('success', 'Color added');
+    }
 
 
 

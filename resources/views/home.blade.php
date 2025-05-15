@@ -68,7 +68,7 @@
     <section class="py-12 mb-8 bg-white relative z-10">
         <div class="container max-w-4xl mx-auto px-4 relative z-10">
             <!-- Header -->
-            <div class="flex justify-end items-center mb-8 gap-8 z-20 relative">
+            <div class="flex justify-end items-center mb-8 md:mr-4 gap-8 z-20 relative">
                 <h2 class="text-2xl font-bold">SHOP THE LOOK</h2>
                 <div class="flex gap-4">
                     <button
@@ -112,6 +112,46 @@
 
         </div>
     </section>
+
+    <!-- New Arrivals Section -->
+    <section class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <!-- Section Heading -->
+            <div class="flex justify-between items-center mb-8">
+                <h2 class="text-2xl font-bold text-gray-800">New Arrivals</h2>
+                <a href="{{ route('shop') }}" class="text-gray-600 hover:text-gray-800 transition font-medium">View All
+                    &rarr;</a>
+            </div>
+
+            <!-- Product Grid -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:mx-4 gap-2 md:gap-6">
+                @foreach ($newArrivals as $inventory)
+                    @php $product = $inventory->product @endphp
+                    
+                    <div class="bg-white shadow rounded-lg overflow-hidden group hover:shadow-lg transition">
+                        <!-- Product Image -->
+                        <a href="{{ route('product.details', $product->id) }}">
+                            <img src="{{ asset('storage/' . $inventory->image_url) }}" alt="{{ $product->name }}"
+                                class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
+                        
+
+                        <!-- Product Info -->
+                        <div class="p-4">
+                            <h3 class="text-lg font-semibold text-gray-800 truncate"> {{ $product->name }} </h3>
+                            <p class="text-gray-600 mt-1">{{ $product->category->name ?? 'Uncategorized' }}</p>
+                            <div class="mt-2 text-lg font-bold text-gray-900">Rs. {{ number_format($inventory->price, 2) }}</div>
+                        </div>
+                        </a>
+                    </div>
+                @endforeach
+            </div>
+
+            @if ($newArrivals->isEmpty())
+                <p class="text-gray-500 text-center mt-8">No new arrivals at the moment. Please check back later!</p>
+            @endif
+        </div>
+    </section>
+
 
 
     <script>

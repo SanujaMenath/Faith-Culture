@@ -28,8 +28,9 @@
                     @php
                         $inventory = $product->inventories->first(); // Get the first variant
                     @endphp
-
-                    <div class="p-4 shadow rounded h-full max-w-sm min-w-3xs mx-auto flex flex-col">
+                    
+                    <div class="p-4 shadow rounded h-full max-w-sm min-w-3xs mx-auto flex flex-col hover:shadow-lg">
+                        <a href="{{ route('product.details', $product->id) }}">
                         <div class="grow">
                             <h2 class="text-lg font-semibold truncate">{{ $product->name }}</h2>
                             <p class="text-gray-600 h-12 overflow-hidden">{{ $product->description }}</p>
@@ -50,12 +51,15 @@
                             <p class="text-blue-600 font-bold text-lg">
                                 Rs. {{ $inventory ? $inventory->price : 'N/A' }}
                             </p>
-                            <a href="{{ route('product.details', $product->id) }}"
-                                class="bg-gray-800 text-white px-4 py-2 text-sm rounded hover:bg-gray-600 transition">
+
+                            <button class="bg-gray-800 text-white px-4 py-2 text-sm rounded hover:bg-gray-600 transition">
                                 Add
-                            </a>
+                            </button>
+
                         </div>
+                        </a>
                     </div>
+                    
                 @endforeach
 
             </div>

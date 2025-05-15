@@ -7,6 +7,7 @@ use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
+use App\Models\Inventory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShopController;
@@ -25,8 +26,10 @@ use App\Http\Controllers\ProductController;
 
 //Main routes
 Route::get('/', function () {
-    return view('home');
+     $newArrivals = Inventory::with('product.category')->latest()->take(4)->get(); 
+        return view('home', compact('newArrivals'));
 });
+
 Route::get('/settings', function () {
     return view('settings');
 });

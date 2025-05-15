@@ -1,4 +1,4 @@
-<header class="fixed top-0 left-0 right-0 w-full py-2 bg-white shadow-md z-50">
+<header class="fixed top-0 left-0 right-0 w-full py-2 bg-white shadow-2xl z-50">
   <!-- Desktop and Large Screen Layout -->
   <div class="mx-auto lg:mx-8 px-4">
     <!-- Desktop Layout (hidden on mobile) -->
@@ -140,7 +140,7 @@
   </div>
 
   <!-- Mobile Navigation Menu (Hidden by default) -->
-  <div id="mobile-menu" class="md:hidden hidden bg-white border-t mt-2">
+  <div id="mobile-menu" class="md:hidden bg-white border-t mt-2">
     <nav class="py-2">
       <a href="/" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->is('/') ? 'bg-gray-100 font-semibold text-gray-900' : '' }}">Home</a>
       <a href="/shop" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 {{ request()->is('shop*') ? 'bg-gray-100 font-semibold text-gray-900' : '' }}">Shop</a>
@@ -151,7 +151,7 @@
 </header>
 
 <!-- Adding padding to the top of the body to prevent content from being hidden behind the fixed header -->
-<div class="pt-24">
+<div class="pt-20">
   <!-- Your page content starts here -->
 </div>
 

@@ -66,9 +66,9 @@
 
     <!-- Shop the Look Section -->
     <section class="py-12 mb-8 bg-white relative z-10">
-        <div class="container mx-auto px-4 relative z-10">
+        <div class="container max-w-4xl mx-auto px-4 relative z-10">
             <!-- Header -->
-            <div class="flex justify-between items-center mb-8 sm:mr-24 z-20 relative">
+            <div class="flex justify-end items-center mb-8 gap-8 z-20 relative">
                 <h2 class="text-2xl font-bold">SHOP THE LOOK</h2>
                 <div class="flex gap-4">
                     <button
@@ -83,15 +83,15 @@
             </div>
 
             <!-- Content Grid -->
-            <div class="flex flex-col md:flex-row gap-10 relative z-10">
+            <div class="flex flex-col justify-center md:flex-row gap-4 md:gap-16 relative z-10">
                 <!-- Left (Model Image) -->
-                <div class="flex-1 h-[480px]  overflow-hidden rounded-lg">
+                <div class="flex sm:h-[480px] sm:w-[380px] overflow-hidden rounded-lg mx-auto md:mx-0">
                     <img src="{{ asset('storage/images/home2.jpg') }}" alt="Model"
                         class="w-full h-full object-cover rounded-lg">
                 </div>
 
                 <!-- Right (Product Images) -->
-                <div class="flex flex-col lg:flex-row w-full gap-8 md:w-[40%]">
+                <div class="flex flex-col lg:flex-row gap-4 md:gap-8 ">
                     <!-- Top -->
                     <div class="flex items-center justify-center lg:justify-end flex-1">
                         <div class="w-[180px] h-auto">
@@ -108,7 +108,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
         </div>

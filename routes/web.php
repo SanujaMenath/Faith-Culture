@@ -26,8 +26,8 @@ use App\Http\Controllers\ProductController;
 
 //Main routes
 Route::get('/', function () {
-     $newArrivals = Inventory::with('product.category')->latest()->take(4)->get(); 
-        return view('home', compact('newArrivals'));
+    $newArrivals = Inventory::with('product.category')->latest()->take(4)->get();
+    return view('home', compact('newArrivals'));
 });
 
 Route::get('/settings', function () {
@@ -37,10 +37,14 @@ Route::get('/shop', [ShopController::class, 'index'])->name('shop');
 Route::get('/shop/category/{id}', [ShopController::class, 'filterByCategory'])->name('shop.category');
 Route::get('/shop/product/{id}', [ProductController::class, 'productDetails'])->name('product.details');
 Route::get('/select-profile', [UserController::class, 'profile'])->middleware('auth')->name('select.profile');
+Route::get('/about', function () {
+    return view('about');
+})->name('about');
 
 // User Profile
 Route::get('/profile', function () {
-    return view('profile'); })->middleware(['auth', 'role:USER'])->name('profile');
+    return view('profile');
+})->middleware(['auth', 'role:USER'])->name('profile');
 
 Route::get('/login', [AuthController::class, 'showlogin'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');

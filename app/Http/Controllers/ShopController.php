@@ -13,7 +13,7 @@ class ShopController extends Controller
 public function index()
 {
     $categories = Category::all();
-    $products = Product::with('inventories')->get();
+    $products = Product::with('inventories')->simplePaginate(12);
     return view('shop.index', compact('products', 'categories'));
 }
 public function filterByCategory($id)

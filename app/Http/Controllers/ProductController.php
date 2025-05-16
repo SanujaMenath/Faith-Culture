@@ -9,10 +9,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-    public function home()
-    {
-       
-    }
+     
     public function productDetails($id)
     {
         $product = Product::with('inventories.color', 'inventories.size')->findOrFail($id);

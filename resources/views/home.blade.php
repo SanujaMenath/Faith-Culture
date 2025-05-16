@@ -65,7 +65,7 @@
     </section>
 
     <!-- Shop the Look Section -->
-    <section class="py-12 mb-8 bg-white relative z-10">
+    <section class="py-12 mb-4 bg-white relative z-10">
         <div class="container max-w-4xl mx-auto px-4 relative z-10">
             <!-- Header -->
             <div class="flex justify-end items-center mb-8 md:mr-4 gap-8 z-20 relative">
@@ -91,7 +91,7 @@
                 </div>
 
                 <!-- Right (Product Images) -->
-                <div class="flex flex-col lg:flex-row gap-4 md:gap-8 ">
+                <div class="flex flex-row gap-2 md:gap-6 ">
                     <!-- Top -->
                     <div class="flex items-center justify-center lg:justify-end flex-1">
                         <div class="w-[180px] h-auto">
@@ -114,7 +114,7 @@
     </section>
 
     <!-- New Arrivals Section -->
-    <section class="py-12 bg-gray-50">
+    <section class="py-10 bg-gray-50">
         <div class="container mx-auto px-4">
             <!-- Section Heading -->
             <div class="flex justify-between items-center mb-8">

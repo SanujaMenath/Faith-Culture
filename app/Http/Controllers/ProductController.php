@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
-     
+
     public function productDetails($id)
     {
         $product = Product::with('inventories.color', 'inventories.size')->findOrFail($id);
@@ -50,7 +50,16 @@ class ProductController extends Controller
         ]);
     }
 
+    public function search(Request $request)
+    {
+        $query = $request->input('query');
 
+        $products = Product::where('name', 'like', "%{$query}%")
+        ->orWhere('description', 'like', "%{$query}%")
+        ->with('inventories')
+        ->get();
 
+        return view('search-results',compact('products', 'query'));
+    }
 
 }

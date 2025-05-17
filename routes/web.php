@@ -110,3 +110,7 @@ Route::get('/checkout/success', [OrderController::class, 'checkoutSuccess'])->na
 Route::get('/checkout/cancel', [CheckoutController::class, 'cancel'])->name('checkout.cancel');
 
 Route::get('/order', [OrderController::class, 'confirmOrder'])->name('orders.confirm');
+
+// search products
+Route::get('/search', [ProductController::class, 'search'])->name('search.page');
+

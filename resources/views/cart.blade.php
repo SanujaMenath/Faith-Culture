@@ -94,7 +94,7 @@
         @else
             <div class="text-center py-12">
                 <p class="text-xl mb-6">Your cart is empty.</p>
-                <a href="{{ route('cart.index') }}"
+                <a href="{{ route('shop') }}"
                     class="inline-block bg-black text-white px-6 py-3 rounded font-semibold hover:bg-gray-800 transition">Continue
                     Shopping</a>
             </div>

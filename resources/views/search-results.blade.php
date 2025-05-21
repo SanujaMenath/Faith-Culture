@@ -21,7 +21,7 @@
                         <div class="border rounded hover:border-gray-400 transition duration-300 h-full flex flex-col">
                             <a href="{{ route('product.details',$product->id) }}" class="h-full flex flex-col">
                                 <!-- 4:3 Aspect Ratio Image Container -->
-                                <div class="relative w-full overflow-hidden" style="padding-top: 75%">
+                                <div class="relative aspect-[4/5] overflow-hidden" style="padding-top: 75%">
                                     @if ($variant->image_url)
                                         <img src="{{ asset('storage/' . $variant->image_url) }}" alt="{{ $product->name }} - {{ $variant->color->name }}"
                                             class="absolute top-0 left-0 w-full h-full object-cover">
@@ -63,9 +63,7 @@
         @empty
             <div class="bg-white shadow rounded p-8 text-center">
                 <div class="text-gray-400 mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                    </svg>
+                    <i class="fa-solid fa-search fa-2x"></i>
                 </div>
                 <h2 class="text-xl font-semibold text-gray-700 mb-2">No Products Found</h2>
                 <p class="text-gray-500">We couldn't find any products matching "{{ $query }}"</p>

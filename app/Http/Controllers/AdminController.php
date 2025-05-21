@@ -55,16 +55,14 @@ class AdminController extends Controller
             'category_id' => 'nullable|exists:categories,id',
         ]);
 
-
-
-        // 3. Create product
+        // 2. Create product
         Product::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
             'category_id' => $validated['category_id'] ?? null,
         ]);
 
-        // 4. Redirect back with success message
+        // 3. Redirect back with success message
         return back()->with('success', 'Product added successfully.');
     }
 

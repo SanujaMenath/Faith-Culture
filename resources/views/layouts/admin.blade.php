@@ -12,6 +12,22 @@
     <!-- Tailwind setup -->
     @vite('resources/css/app.css')
     @vite('resources/js/app.js')
+
+    <style>
+        input[type='number']::-webkit-outer-spin-button,
+        input[type='number']::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        input[type='number'] {
+            -moz-appearance: textfield;
+        }
+
+        [x-cloak] {
+            display: none !important;
+        }
+    </style>
 </head>
 
 <body class="min-h-screen flex flex-col bg-white text-gray-900">

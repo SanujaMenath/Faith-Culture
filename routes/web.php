@@ -41,6 +41,7 @@ Route::get('/about', function () {
     return view('about');
 })->name('about');
 
+
 // User Profile
 Route::get('/profile', function () {
     return view('profile');

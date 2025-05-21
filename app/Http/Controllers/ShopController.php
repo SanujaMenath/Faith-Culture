@@ -18,8 +18,8 @@ public function index()
 }
 public function filterByCategory($id)
 {
-    $products = Product::with('inventories')->where('category_id', $id)->get();
-    $categories = Category::all(); // Still show all categories in the sidebar
+    $products = Product::with('inventories')->where('category_id', $id)->simplePaginate(12);
+    $categories = Category::all(); 
 
     return view('shop.index', compact('products', 'categories'));
 }

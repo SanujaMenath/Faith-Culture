@@ -80,6 +80,7 @@ Route::post('/admin/manage-products', [AdminController::class, 'addProduct'])->m
 Route::delete('admin/manage-products/{id}/delete',[AdminController::class,'deleteProduct'])->middleware(['auth', 'role:ADMIN'])->name('admin.productDelete');
 Route::get('/admin/manage-inventory', [AdminController::class, 'viewInventory'])->middleware(['auth', 'role:ADMIN'])->name('admin.inventory');
 Route::post('/admin/manage-inventory', [AdminController::class, 'manageInventory'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageInventory');
+Route::delete('/admin/manage-inventory/{id}/delete', [AdminController::class, 'deleteInventory'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteInventory');
 Route::get('admin/manage-sizes', [AdminController::class, 'showAddSizeForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageSizes');
 Route::post('admin/manage-sizes', [AdminController::class, 'addSize'])->middleware(['auth', 'role:ADMIN'])->name('admin.addSizeForm');
 Route::delete('admin/manage-sizes/{id}/delete', [AdminController::class, 'deleteSize'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteSize');

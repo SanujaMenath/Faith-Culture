@@ -133,6 +133,13 @@ class AdminController extends Controller
         return back()->with('success', 'Inventory updated successfully.');
     }
 
+    public function deleteInventory($id){
+        $inventories = Inventory::findOrFail($id);
+        $inventories->delete();
+
+        return back()->with('success', 'Inventory deleted successfully.');
+    }
+
     public function showAddSizeForm()
     {
         $sizes = Size::all();

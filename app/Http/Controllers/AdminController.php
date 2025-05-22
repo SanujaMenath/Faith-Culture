@@ -47,7 +47,7 @@ class AdminController extends Controller
 
         return back()->with('success', 'Category deleted');
     }
-    
+
     public function showAddProductsForm()
     {
         $products = Product::all();
@@ -72,6 +72,13 @@ class AdminController extends Controller
 
         // 3. Redirect back with success message
         return back()->with('success', 'Product added successfully.');
+    }
+
+    public function deleteProduct($id){
+        $product = Product::findOrFail($id);
+        $product->delete();
+
+        return back()->with('success', 'Product deleted');
     }
 
     public function viewInventory()

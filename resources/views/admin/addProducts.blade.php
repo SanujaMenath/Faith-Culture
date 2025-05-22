@@ -13,8 +13,11 @@
                 <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-6 rounded shadow-md">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clip-rule="evenodd" />
+                            <svg class="h-5 w-5 text-red-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z"
+                                    clip-rule="evenodd" />
                             </svg>
                         </div>
                         <div class="ml-3">
@@ -33,11 +36,15 @@
 
             {{-- Success Message --}}
             @if (session('success'))
-                <div id="successAlert" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-md relative">
+                <div id="successAlert"
+                    class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-6 rounded shadow-md relative">
                     <div class="flex">
                         <div class="flex-shrink-0">
-                            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                            <svg class="h-5 w-5 text-green-500" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
+                                fill="currentColor">
+                                <path fill-rule="evenodd"
+                                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                                    clip-rule="evenodd" />
                             </svg>
                         </div>
                         <div class="ml-3">
@@ -47,7 +54,9 @@
                     <button type="button" onclick="document.getElementById('successAlert').style.display='none'"
                         class="absolute top-0 right-0 mt-4 mr-4 text-green-700 hover:text-green-900">
                         <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                            <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                            <path fill-rule="evenodd"
+                                d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+                                clip-rule="evenodd" />
                         </svg>
                     </button>
                 </div>
@@ -61,8 +70,8 @@
 
                     <div class="mb-4">
                         <label for="name" class="block text-gray-700 font-medium mb-2">Product Name</label>
-                        <input type="text" name="name" id="name" 
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('name') border-red-500 @enderror" 
+                        <input type="text" name="name" id="name"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('name') border-red-500 @enderror"
                             value="{{ old('name') }}" required>
                         @error('name')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -71,8 +80,8 @@
 
                     <div class="mb-4">
                         <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
-                        <textarea name="description" id="description" 
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('description') border-red-500 @enderror" 
+                        <textarea name="description" id="description"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('description') border-red-500 @enderror"
                             rows="4">{{ old('description') }}</textarea>
                         @error('description')
                             <p class="text-red-500 text-xs italic mt-1">{{ $message }}</p>
@@ -81,8 +90,8 @@
 
                     <div class="mb-4">
                         <label for="category_id" class="block text-gray-700 font-medium mb-2">Category</label>
-                        <select name="category_id" id="category_id" 
-                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('category_id') border-red-500 @enderror" 
+                        <select name="category_id" id="category_id"
+                            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline @error('category_id') border-red-500 @enderror"
                             required>
                             <option value="">-- Select Category --</option>
                             @foreach ($categories as $category)
@@ -97,7 +106,7 @@
                     </div>
 
                     <div class="flex items-center justify-between">
-                        <button type="submit" 
+                        <button type="submit"
                             class="bg-gray-800 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline transition duration-200">
                             Add Product
                         </button>
@@ -108,25 +117,30 @@
             {{-- Products List Section --}}
             <div>
                 <h2 class="text-2xl font-bold text-gray-800 mb-4">All Products</h2>
-                
+
                 {{-- Responsive Table for Products --}}
                 <div class="overflow-x-auto hidden md:block bg-white shadow-md rounded">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
                                     Product Name
                                 </th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
                                     Description
                                 </th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
                                     Category
                                 </th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
                                     Created At
                                 </th>
-                                <th scope="col" class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
+                                <th scope="col"
+                                    class="px-4 sm:px-6 py-3 text-left text-xs sm:text-sm font-medium text-gray-500 uppercase tracking-wider">
                                     Actions
                                 </th>
                             </tr>
@@ -148,7 +162,15 @@
                                     </td>
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
-                                        <a href="#" onclick="confirmDelete({{ $product->id }})" class="text-red-600 hover:text-red-900">Delete</a>
+                                        <form id="deleteForm" method="POST" action="{{ route('admin.productDelete', $product->id) }}" class="inline-block"
+                                            onsubmit="return confirmDelete('{{ $product->name }}');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit"
+                                                class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white transition duration-200">
+                                                Delete
+                                            </button>
+                                        </form>
                                     </td>
                                 </tr>
                             @empty
@@ -161,7 +183,7 @@
                         </tbody>
                     </table>
                 </div>
-                
+
                 {{-- Mobile Product Cards (Visible only on smallest screens) --}}
                 <div class="md:hidden mt-4 space-y-4">
                     @forelse ($products as $product)
@@ -174,7 +196,15 @@
                             </div>
                             <div class="flex justify-end space-x-3 mt-2 pt-2 border-t border-gray-100">
                                 <a href="" class="text-xs text-blue-600 hover:text-blue-900">Edit</a>
-                                <a href="#" onclick="confirmDelete({{ $product->id }})" class="text-xs text-red-600 hover:text-red-900">Delete</a>
+                                <form id="deleteForm" method="POST" action="{{ route('admin.productDelete',$product->id) }}" class="inline-block"
+                                    onsubmit="return confirmDelete('{{ $product->name }}');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit"
+                                        class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white transition duration-200">
+                                        Delete
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     @empty
@@ -187,29 +217,11 @@
         </div>
     </div>
 
-    {{-- Delete Confirmation Modal (Hidden by default) --}}
-    <div id="deleteModal" class="fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl p-6 sm:p-8 max-w-md mx-4 sm:mx-auto">
-            <h3 class="text-lg font-bold text-gray-900 mb-4">Confirm Delete</h3>
-            <p class="text-gray-700 mb-6">Are you sure you want to delete this product? This action cannot be undo.</p>
-            <div class="flex justify-end space-x-4">
-                <button onclick="cancelDelete()" class="px-4 py-2 bg-gray-200 hover:bg-gray-300 rounded text-gray-800 transition duration-200">
-                    Cancel
-                </button>
-                <form id="deleteForm" method="POST" action="">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="px-4 py-2 bg-red-600 hover:bg-red-700 rounded text-white transition duration-200">
-                        Delete
-                    </button>
-                </form>
-            </div>
-        </div>
-    </div>
+
 
     <script>
         // For the success alert dismissal
-        setTimeout(function() {
+        setTimeout(function () {
             const successAlert = document.getElementById('successAlert');
             if (successAlert) {
                 successAlert.style.display = 'none';
@@ -217,16 +229,11 @@
         }, 5000);
 
         // For the delete modal
-        function confirmDelete(productId) {
-            const modal = document.getElementById('deleteModal');
-            const form = document.getElementById('deleteForm');
-            
-            // Set the form action
-            form.action = `/admin/products/${productId}/delete`;
-            
-            // Show the modal
-            modal.classList.remove('hidden');
+
+        function confirmDelete(productName) {
+            return confirm("Are you sure you want to delete " + productName + "?");
         }
+
 
         function cancelDelete() {
             const modal = document.getElementById('deleteModal');

@@ -150,6 +150,14 @@ class AdminController extends Controller
 
         return back()->with('success', 'Size added');
     }
+
+    public function deleteSize($id)
+    {
+        $size = Size::findOrFail($id);
+        $size->delete();
+
+        return back()->with('success', 'Size deleted');
+    }
     public function showAddColorForm()
     {
         $colors = Color::all();
@@ -168,7 +176,13 @@ class AdminController extends Controller
         return back()->with('success', 'Color added');
     }
 
+    public function deleteColor($id){
+        $colors = Color::findOrFail($id);
+        $colors->delete();
 
+        return back()->with('success', 'Color deleted');
+
+    }
 
     public function editHomepage()
     {

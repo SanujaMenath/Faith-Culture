@@ -163,7 +163,7 @@
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
                                         <form id="deleteForm" method="POST" action="{{ route('admin.productDelete', $product->id) }}" class="inline-block"
-                                            onsubmit="return confirmDelete('{{ $product->name }}');">
+                                             onsubmit="return confirm('Are you sure you want to delete {{ $product->name }}?');">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
@@ -197,7 +197,7 @@
                             <div class="flex justify-end space-x-3 mt-2 pt-2 border-t border-gray-100">
                                 <a href="" class="text-xs text-blue-600 hover:text-blue-900">Edit</a>
                                 <form id="deleteForm" method="POST" action="{{ route('admin.productDelete',$product->id) }}" class="inline-block"
-                                    onsubmit="return confirmDelete('{{ $product->name }}');">
+                                    onsubmit="return confirm('Are you sure you want to delete {{ $product->name }}?');">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -228,16 +228,7 @@
             }
         }, 5000);
 
-        // For the delete modal
+    
 
-        function confirmDelete(productName) {
-            return confirm("Are you sure you want to delete " + productName + "?");
-        }
-
-
-        function cancelDelete() {
-            const modal = document.getElementById('deleteModal');
-            modal.classList.add('hidden');
-        }
     </script>
 @endsection

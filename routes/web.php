@@ -75,7 +75,6 @@ Route::get('/admin/profile', [AdminController::class, 'editProfile'])->middlewar
 Route::get('admin/manage-category', [AdminController::class, 'showAddCategoryForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.addCategory');
 Route::post('admin/manage-category', [AdminController::class, 'addCategory'])->middleware(['auth', 'role:ADMIN'])->name('admin.addCategoryForm');
 Route::delete('admin/manage-category/{id}/delete', [AdminController::class, 'deleteCategory'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteCategory');
-
 Route::get('admin/manage-products', [AdminController::class, 'showAddProductsForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.addProducts');
 Route::post('/admin/manage-products', [AdminController::class, 'addProduct'])->middleware(['auth', 'role:ADMIN'])->name('admin.addProductsForm');
 Route::delete('admin/manage-products/{id}/delete',[AdminController::class,'deleteProduct'])->middleware(['auth', 'role:ADMIN'])->name('admin.productDelete');
@@ -83,8 +82,10 @@ Route::get('/admin/manage-inventory', [AdminController::class, 'viewInventory'])
 Route::post('/admin/manage-inventory', [AdminController::class, 'manageInventory'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageInventory');
 Route::get('admin/manage-sizes', [AdminController::class, 'showAddSizeForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageSizes');
 Route::post('admin/manage-sizes', [AdminController::class, 'addSize'])->middleware(['auth', 'role:ADMIN'])->name('admin.addSizeForm');
+Route::delete('admin/manage-sizes/{id}/delete', [AdminController::class, 'deleteSize'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteSize');
 Route::get('admin/manage-colors', [AdminController::class, 'showAddColorForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.manageColors');
 Route::post('admin/manage-colors', [AdminController::class, 'addColor'])->middleware(['auth', 'role:ADMIN'])->name('admin.addColorForm');
+Route::delete('admin/manage-colors/{id}/delete',[AdminController::class, 'deleteColor'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteColor');
 // Manage staff
 Route::get('/admin/create-staff', [AdminController::class, 'showCreateStaffForm'])->name('admin.staffs');
 Route::post('/admin/create-staff', [AdminController::class, 'createStaff'])->name('admin.createStaff');

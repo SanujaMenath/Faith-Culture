@@ -74,6 +74,8 @@ Route::get('/admin/dashboard', [AdminController::class, 'index'])
 Route::get('/admin/profile', [AdminController::class, 'editProfile'])->middleware(['auth', 'role:ADMIN'])->name('admin.profile');
 Route::get('admin/manage-category', [AdminController::class, 'showAddCategoryForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.addCategory');
 Route::post('admin/manage-category', [AdminController::class, 'addCategory'])->middleware(['auth', 'role:ADMIN'])->name('admin.addCategoryForm');
+Route::delete('admin/manage-category/{id}/delete', [AdminController::class, 'deleteCategory'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteCategory');
+
 Route::get('admin/manage-products', [AdminController::class, 'showAddProductsForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.addProducts');
 Route::post('/admin/manage-products', [AdminController::class, 'addProduct'])->middleware(['auth', 'role:ADMIN'])->name('admin.addProductsForm');
 Route::get('/admin/manage-inventory', [AdminController::class, 'viewInventory'])->middleware(['auth', 'role:ADMIN'])->name('admin.inventory');

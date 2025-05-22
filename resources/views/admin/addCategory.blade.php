@@ -88,7 +88,14 @@
                                     </td>
                                     <td class="px-4 sm:px-6 py-4 whitespace-nowrap text-sm font-medium">
                                         <a href="#" class="text-blue-600 hover:text-blue-900 mr-3">Edit</a>
-                                        <a href="#" class="text-red-600 hover:text-red-900">Delete</a>
+                                        <form action="{{ route('admin.deleteCategory', $category->id) }}" method="POST"
+                                            class="inline-block"
+                                            onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="text-red-600 hover:text-red-900">Delete</button>
+                                        </form>
+
                                     </td>
                                 </tr>
                             @empty
@@ -115,7 +122,12 @@
                             </div>
                             <div class="flex justify-end space-x-3">
                                 <a href="#" class="text-xs text-blue-600 hover:text-blue-900">Edit</a>
-                                <a href="#" class="text-xs text-red-600 hover:text-red-900">Delete</a>
+                                <form action="{{ route('admin.deleteCategory', $category->id) }}" method="POST"
+                                    onsubmit="return confirm('Are you sure you want to delete this category?');">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="text-xs text-red-600 hover:text-red-900">Delete</button>
+                                </form>
                             </div>
                         </div>
                     @empty

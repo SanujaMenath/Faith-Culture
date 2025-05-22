@@ -40,6 +40,14 @@ class AdminController extends Controller
 
         return back()->with('success', 'Category added');
     }
+    public function deleteCategory($id)
+    {
+        $category = Category::findOrFail($id);
+        $category->delete();
+
+        return back()->with('success', 'Category deleted');
+    }
+    
     public function showAddProductsForm()
     {
         $products = Product::all();

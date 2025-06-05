@@ -71,9 +71,9 @@
         <a href="/select-profile" class="block px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
           <i class="fa-solid fa-circle-user mr-2"></i> Profile
         </a>
-        <a href="/settings" class="block px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
-          <i class="fas fa-cog mr-2"></i> Settings
-        </a>
+
+        <!-- settings -->
+         
         <div class="border-t border-gray-100"></div>
         <a href="/logout" class="block w-full text-left px-3 py-1 text-sm text-gray-700 hover:bg-gray-100">
           <i class="fas fa-sign-out-alt mr-2"></i> Log out

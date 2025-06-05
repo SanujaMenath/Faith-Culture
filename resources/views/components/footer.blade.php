@@ -27,8 +27,8 @@
             <div>
                 <h3 class="font-bold text-gray-200 text-lg mb-4">Quick Links</h3>
                 <ul class="space-y-2">
-                    <li><a href="#" class="hover:text-gray-400 transition-colors duration-300">Home</a></li>
-                    <li><a href="#" class="hover:text-gray-400 transition-colors duration-300">About Us</a></li>
+                    <li><a href="/" class="hover:text-gray-400 transition-colors duration-300">Home</a></li>
+                    <li><a href="/about" class="hover:text-gray-400 transition-colors duration-300">About Us</a></li>
                     <li><a href="/shop" class="hover:text-gray-400 transition-colors duration-300">Shop</a></li>
                     <li><a href="#" class="hover:text-gray-400 transition-colors duration-300">Contact</a></li>
                 </ul>

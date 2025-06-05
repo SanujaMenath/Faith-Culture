@@ -7,6 +7,7 @@ use App\Models\Color;
 use App\Models\Inventory;
 use App\Models\Product;
 use App\Models\Size;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -74,7 +75,8 @@ class AdminController extends Controller
         return back()->with('success', 'Product added successfully.');
     }
 
-    public function deleteProduct($id){
+    public function deleteProduct($id)
+    {
         $product = Product::findOrFail($id);
         $product->delete();
 
@@ -133,7 +135,8 @@ class AdminController extends Controller
         return back()->with('success', 'Inventory updated successfully.');
     }
 
-    public function deleteInventory($id){
+    public function deleteInventory($id)
+    {
         $inventories = Inventory::findOrFail($id);
         $inventories->delete();
 
@@ -183,7 +186,8 @@ class AdminController extends Controller
         return back()->with('success', 'Color added');
     }
 
-    public function deleteColor($id){
+    public function deleteColor($id)
+    {
         $colors = Color::findOrFail($id);
         $colors->delete();
 

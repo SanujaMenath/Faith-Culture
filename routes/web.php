@@ -5,6 +5,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\OrderController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
 use App\Models\Inventory;
@@ -43,9 +44,7 @@ Route::get('/about', function () {
 
 
 // User Profile
-Route::get('/profile', function () {
-    return view('profile');
-})->middleware(['auth', 'role:USER'])->name('profile');
+Route::get('/profile', [ProfileController::class, 'show'])->middleware(['auth', 'role:USER'])->name('profile');
 
 Route::get('/login', [AuthController::class, 'showlogin'])->name('login.form');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
@@ -72,6 +71,7 @@ Route::post('/email/verification-notification', function (Request $request) {
 Route::get('/admin/dashboard', [AdminController::class, 'index'])
     ->middleware(['auth', 'role:ADMIN'])->name('admin.index');
 Route::get('/admin/profile', [AdminController::class, 'editProfile'])->middleware(['auth', 'role:ADMIN'])->name('admin.profile');
+Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
 Route::get('admin/manage-category', [AdminController::class, 'showAddCategoryForm'])->middleware(['auth', 'role:ADMIN'])->name('admin.addCategory');
 Route::post('admin/manage-category', [AdminController::class, 'addCategory'])->middleware(['auth', 'role:ADMIN'])->name('admin.addCategoryForm');
 Route::delete('admin/manage-category/{id}/delete', [AdminController::class, 'deleteCategory'])->middleware(['auth', 'role:ADMIN'])->name('admin.deleteCategory');

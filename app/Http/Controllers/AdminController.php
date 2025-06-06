@@ -18,9 +18,10 @@ class AdminController extends Controller
         return view('admin.index');
     }
 
-    public function editProfile()
+    public function editProfile(Request $request)
     {
-        return view('admin.profile');
+         $editMode = $request->query('edit') === 'true';
+        return view('admin.profile', compact('editMode'));
     }
 
     public function showAddCategoryForm()

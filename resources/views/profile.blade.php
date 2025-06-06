@@ -11,7 +11,7 @@
             {{ session('success') }}
         </div>
     @endif
-
+   
     <div class="bg-white shadow rounded-lg p-6">
         @if($editMode)
             <form method="POST" action="{{ route('profile.update') }}">

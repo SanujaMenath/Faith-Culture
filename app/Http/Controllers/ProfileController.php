@@ -9,17 +9,16 @@ use Illuminate\Support\Facades\Auth;
 class ProfileController extends Controller
 {
     public function show(Request $request)
-{
-    $editMode = $request->query('edit') === 'true';
-    return view('profile', compact('editMode')); // <-- Passes $editMode to Blade
-}
+    {
+        $editMode = $request->query('edit') === 'true';
+        return view('profile', compact('editMode')); // <-- Passes $editMode to Blade
+    }
 
-public function update(Request $request)
+    public function update(Request $request)
     {
         $request->validate([
             'name' => 'required|string|max:255',
             'address' => 'nullable|string|max:255',
-            // Add other fields if needed
         ]);
 
         $user = Auth::user();
@@ -28,6 +27,13 @@ public function update(Request $request)
             'address' => $request->address,
         ]);
 
+        if ($user->role === 'ADMIN') {
+            return redirect()->route('admin.profile')->with('success', 'Profile updated successfully!');
+        } elseif ($user->role === 'USER') { // or 'user' if that's what you're using
+            return redirect()->route('profile')->with('success', 'Profile updated successfully!');
+        }
+        // Fallback
         return redirect()->route('profile')->with('success', 'Profile updated successfully!');
     }
+
 }

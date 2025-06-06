@@ -65,53 +65,62 @@
     </section>
 
     <!-- Shop the Look Section -->
-    <section class="py-12 mb-4 bg-white relative z-10">
-        <div class="container max-w-4xl mx-auto px-4 relative z-10">
-            <!-- Header -->
-            <div class="flex justify-end items-center mb-8 md:mr-4 gap-8 z-20 relative">
-                <h2 class="text-2xl font-bold">SHOP THE LOOK</h2>
-                <div class="flex gap-4">
-                    <button
-                        class="w-10 h-10 flex items-center justify-center border rounded-full hover:bg-gray-100 transition">
-                        <span><i class="fa-solid fa-arrow-left fa-2x"></i></span>
-                    </button>
-                    <button
-                        class="w-10 h-10 flex items-center justify-center border rounded-full hover:bg-gray-100 transition">
-                        <span><i class="fa-solid fa-arrow-right fa-2x"></i></span>
-                    </button>
-                </div>
-            </div>
+    @php
+        $look = \App\Models\ShopTheLook::first();
+    @endphp
 
-            <!-- Content Grid -->
-            <div class="flex flex-col justify-center md:flex-row gap-4 md:gap-16 relative z-10">
-                <!-- Left (Model Image) -->
-                <div class="flex sm:h-[480px] sm:w-[380px] overflow-hidden rounded-lg mx-auto md:mx-0">
-                    <img src="{{ asset('storage/images/home2.jpg') }}" alt="Model"
-                        class="w-full h-full object-cover rounded-lg">
+    @if($look)
+        <section class="py-12 mb-4 bg-white relative z-10">
+            <div class="container max-w-4xl mx-auto px-4 relative z-10">
+
+                <!-- Header -->
+                <div class="flex justify-end items-center mb-8 md:mr-4 gap-8 z-20 relative">
+                    <h2 class="text-2xl font-bold">SHOP THE LOOK</h2>
+                    <div class="flex gap-4">
+                        <button
+                            class="w-10 h-10 flex items-center justify-center border rounded-full hover:bg-gray-100 transition">
+                            <i class="fa-solid fa-arrow-left fa-2x"></i>
+                        </button>
+                        <button
+                            class="w-10 h-10 flex items-center justify-center border rounded-full hover:bg-gray-100 transition">
+                            <i class="fa-solid fa-arrow-right fa-2x"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Right (Product Images) -->
-                <div class="flex flex-row gap-2 md:gap-6 ">
-                    <!-- Top -->
-                    <div class="flex items-center justify-center lg:justify-end flex-1">
-                        <div class="w-[180px] h-auto">
-                            <img src="{{ asset('storage/products/1746609735.jpg') }}" alt="Top"
-                                class="w-full h-auto object-cover rounded-lg shadow">
+                <!-- Content Grid -->
+                <div class="flex flex-col justify-center md:flex-row gap-4 md:gap-16 relative z-10">
+
+                    <!-- Left: Model Image -->
+                    <div class="flex sm:h-[480px] sm:w-[380px] overflow-hidden rounded-lg mx-auto md:mx-0">
+                        <img src="{{ asset('storage/' . $look->model_image) }}" alt="Model"
+                            class="w-full h-full object-cover rounded-lg">
+                    </div>
+
+                    <!-- Right: Product Images -->
+                    <div class="flex flex-row gap-2 md:gap-6">
+                        <!-- Top -->
+                        <div class="flex items-center justify-center lg:justify-end flex-1">
+                            <a href="{{ $look->top_product_link }}" target="_blank" class="block w-[180px] h-auto">
+                                <img src="{{ asset('storage/' . $look->top_image) }}" alt="Top"
+                                    class="w-full h-auto object-cover rounded-lg shadow">
+                            </a>
+                        </div>
+
+                        <!-- Trouser -->
+                        <div class="flex items-center justify-center lg:justify-start flex-1">
+                            <a href="{{ $look->trouser_product_link }}" target="_blank" class="block w-[180px] h-auto">
+                                <img src="{{ asset('storage/' . $look->trouser_image) }}" alt="Trouser"
+                                    class="w-full h-auto object-cover rounded-lg shadow">
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Trouser -->
-                    <div class="flex items-center justify-center lg:justify-start flex-1">
-                        <div class="w-[180px] h-auto">
-                            <img src="{{ asset('storage/products/pant.jpg') }}" alt="Trouser"
-                                class="w-full h-auto object-cover rounded-lg shadow">
-                        </div>
-                    </div>
                 </div>
             </div>
+        </section>
+    @endif
 
-        </div>
-    </section>
 
     <!-- New Arrivals Section -->
     <section class="py-10 bg-gray-50">
@@ -127,20 +136,21 @@
             <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 md:mx-4 gap-2 md:gap-6">
                 @foreach ($newArrivals as $inventory)
                     @php $product = $inventory->product @endphp
-                    
+
                     <div class="bg-white shadow rounded-lg overflow-hidden group hover:shadow-lg transition">
                         <!-- Product Image -->
                         <a href="{{ route('product.details', $product->id) }}">
                             <img src="{{ asset('storage/' . $inventory->image_url) }}" alt="{{ $product->name }}"
                                 class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-300">
-                        
 
-                        <!-- Product Info -->
-                        <div class="p-4">
-                            <h3 class="text-lg font-semibold text-gray-800 truncate"> {{ $product->name }} </h3>
-                            <p class="text-gray-600 mt-1">{{ $product->category->name ?? 'Uncategorized' }}</p>
-                            <div class="mt-2 text-lg font-bold text-gray-900">Rs. {{ number_format($inventory->price, 2) }}</div>
-                        </div>
+
+                            <!-- Product Info -->
+                            <div class="p-4">
+                                <h3 class="text-lg font-semibold text-gray-800 truncate"> {{ $product->name }} </h3>
+                                <p class="text-gray-600 mt-1">{{ $product->category->name ?? 'Uncategorized' }}</p>
+                                <div class="mt-2 text-lg font-bold text-gray-900">Rs. {{ number_format($inventory->price, 2) }}
+                                </div>
+                            </div>
                         </a>
                     </div>
                 @endforeach

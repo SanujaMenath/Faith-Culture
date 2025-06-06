@@ -1,14 +1,15 @@
 <?php
 
-use App\Http\Controllers\AdminController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\ShopTheLookController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\UserController;
-use App\Models\Inventory;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShopController;
@@ -26,10 +27,7 @@ use App\Http\Controllers\ProductController;
 */
 
 //Main routes
-Route::get('/', function () {
-    $newArrivals = Inventory::with('product.category')->latest()->take(4)->get();
-    return view('home', compact('newArrivals'));
-});
+Route::get('/',[HomeController::class, 'index'])->name('home');
 
 Route::get('/settings', function () {
     return view('settings');
@@ -92,6 +90,7 @@ Route::get('/admin/create-staff', [AdminController::class, 'showCreateStaffForm'
 Route::post('/admin/create-staff', [AdminController::class, 'createStaff'])->name('admin.createStaff');
 // Edit homepage
 Route::get('/admin/edit-homepage', [AdminController::class, 'editHomepage'])->name('admin.editHomepage');
+Route::post('/admin/shop-the-look/update', [ShopTheLookController::class, 'update'])->name('admin.shop-look.update');
 
 
 // Staff Dashboard

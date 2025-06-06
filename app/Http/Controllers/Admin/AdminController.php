@@ -1,13 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Color;
 use App\Models\Inventory;
 use App\Models\Product;
+use App\Models\ShopTheLook;
 use App\Models\Size;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 
@@ -198,7 +199,8 @@ class AdminController extends Controller
 
     public function editHomepage()
     {
-        return view('admin.editHome');
+        $look = ShopTheLook::first();
+        return view('admin.shop-the-look-edit', compact('look'));
     }
 
     public function showCreateStaffForm()

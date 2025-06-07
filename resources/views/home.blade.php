@@ -5,64 +5,45 @@
 @section('content')
     <!-- Hero Section with Image Carousel -->
     <section class="relative h-screen">
-        <!-- Carousel Container -->
-        <div id="heroCarousel" class="carousel relative w-full h-full">
-            <!-- Carousel Item 1 -->
-            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-100 z-10">
-                <img src="{{ asset('storage/images/home1.jpg') }}" alt="Slide 1" class="w-full h-full object-cover">
-                <!-- Semi-transparent overlay -->
+    <div id="heroCarousel" class="carousel relative w-full h-full">
+        @foreach ($slides as $index => $slide)
+            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 {{ $index === 0 ? 'opacity-100 z-10' : 'opacity-0 z-0' }}">
+                <img src="{{ asset('storage/' . $slide->image) }}" alt="Slide {{ $index + 1 }}" class="w-full h-full object-cover">
                 <div class="absolute inset-0 bg-black opacity-50"></div>
             </div>
+        @endforeach
 
-            <!-- Carousel Item 2 -->
-            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0 z-0">
-                <img src="{{ asset('storage/images/home2.jpg') }}" alt="Slide 2" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black opacity-50"></div>
-            </div>
-
-            <!-- Carousel Item 3 -->
-            <div class="carousel-item absolute inset-0 w-full h-full transition-opacity duration-1000 opacity-0 z-0">
-                <img src="{{ asset('storage/images/home3.jpg') }}" alt="Slide 3" class="w-full h-full object-cover">
-                <div class="absolute inset-0 bg-black opacity-50"></div>
-            </div>
-
-
-            <!-- Content with elevated text (shown on all slides) -->
+        <!-- Text & Button Overlay (optional dynamic per slide) -->
+        @if ($slides->isNotEmpty())
             <div class="relative z-10 container mx-auto px-4 h-full flex flex-col items-center justify-center text-center">
-                <div class=" bg-opacity-50 backdrop-blur-sm py-8 px-10 rounded-lg shadow-lg transform translate-y-40">
-                    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">Discover the Latest Fashion</h1>
-                    <p class="text-xl text-white">Trendy. Affordable. Comfortable.</p>
-                    <a href="/shop"
-                        class="mt-6 inline-block bg-gray-500 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition duration-300 transform hover:scale-105 shadow-md">
-                        Shop Now
-                    </a>
+                <div class="bg-opacity-50 backdrop-blur-sm py-8 px-10 rounded-lg shadow-lg transform translate-y-40">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">
+                        {{ $slides[0]->title ?? 'Discover the Latest Fashion' }}
+                    </h1>
+                    <p class="text-xl text-white">{{ $slides[0]->subtitle ?? 'Trendy. Affordable. Comfortable.' }}</p>
+                    @if (!empty($slides[0]->button_link))
+                        <a href="{{ $slides[0]->button_link }}"
+                           class="mt-6 inline-block bg-gray-500 text-white px-8 py-3 rounded-lg hover:bg-gray-700 transition duration-300 transform hover:scale-105 shadow-md">
+                            {{ $slides[0]->button_text ?? 'Shop Now' }}
+                        </a>
+                    @endif
                 </div>
             </div>
+        @endif
 
-            <!-- Previous/Next Arrow Buttons -->
-            <button
-                class="carousel-prev absolute left-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2 rounded-lg hover:bg-opacity-50 transition z-20">
-                <i class="fa-solid fa-angle-left fa-2x"></i>
-            </button>
-            <button
-                class="carousel-next absolute right-4 top-1/2 transform -translate-y-1/2 bg-black bg-opacity-30 text-white p-2 rounded-lg hover:bg-opacity-50 transition z-20">
-                <i class="fa-solid fa-angle-right fa-2x"></i>
-            </button>
+        <!-- Navigation Buttons -->
+        <button class="carousel-prev ..."><i class="fa-solid fa-angle-left fa-2x"></i></button>
+        <button class="carousel-next ..."><i class="fa-solid fa-angle-right fa-2x"></i></button>
 
-            <!-- Carousel Indicators -->
-            <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-2 z-20">
-                <button
-                    class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition"
-                    data-slide="0"></button>
-                <button
-                    class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition"
-                    data-slide="1"></button>
-                <button
-                    class="carousel-indicator w-3 h-3 rounded-full bg-white bg-opacity-50 hover:bg-opacity-100 transition"
-                    data-slide="2"></button>
-            </div>
+        <!-- Dynamic Indicators -->
+        <div class="absolute bottom-6 left-0 right-0 flex justify-center space-x-2 z-20">
+            @foreach ($slides as $index => $slide)
+                <button class="carousel-indicator w-3 h-3 rounded-full bg-white {{ $index === 0 ? 'bg-opacity-100' : 'bg-opacity-50' }} hover:bg-opacity-100 transition" data-slide="{{ $index }}"></button>
+            @endforeach
         </div>
-    </section>
+    </div>
+</section>
+
 
     <!-- Shop the Look Section -->
     @php

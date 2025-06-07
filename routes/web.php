@@ -91,6 +91,13 @@ Route::post('/admin/create-staff', [AdminController::class, 'createStaff'])->nam
 // Edit homepage
 Route::get('/admin/edit-homepage', [AdminController::class, 'editHomepage'])->name('admin.editHomepage');
 Route::post('/admin/shop-the-look/update', [ShopTheLookController::class, 'update'])->name('admin.shop-look.update');
+Route::get('/admin/hero-slides', [\App\Http\Controllers\Admin\HeroSlideController::class, 'index'])->name('admin.view-hero-slides');
+Route::get('/admin/hero-slides/create', [\App\Http\Controllers\Admin\HeroSlideController::class, 'create'])->name('admin.hero-slides-create');
+Route::post('/admin/hero-slides', [\App\Http\Controllers\Admin\HeroSlideController::class, 'store'])->name('admin.hero-slides.store');
+Route::get('/admin/hero-slides/{heroSlide}/edit', [\App\Http\Controllers\Admin\HeroSlideController::class, 'edit'])->name('admin.hero-slides.edit');
+Route::put('/admin/hero-slides/{heroSlide}', [\App\Http\Controllers\Admin\HeroSlideController::class, 'update'])->name('admin.hero-slides.update');
+
+
 
 
 // Staff Dashboard
